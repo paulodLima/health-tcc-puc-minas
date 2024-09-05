@@ -43,7 +43,7 @@ public class UserApplicationService {
 
     public void update(UpdateUserCommand command) {
         var user = repository.findById(command.getId()).orElseThrow();
-        user.update(command.getUsername(), command.getPassword(), command.getEmail(), command.getIsPasswordTemporary(), command.getStatus());
+        user.update(command.getUsername(), command.getPassword(), command.getEmail(), command.getIsPasswordTemporary(), command.getStatus(),command.getUpdateUser());
         repository.save(user);
     }
 }

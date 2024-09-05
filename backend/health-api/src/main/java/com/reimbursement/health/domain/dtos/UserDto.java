@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class UserDto {
+    private String id;
     private String username;
     private String password;
     private String email;
@@ -23,6 +24,7 @@ public class UserDto {
         if (user == null) return null;
 
         var dto  = new UserDto();
+        dto.setId(user.getId().toString());
         dto.setUsername(user.getUsername());
         dto.setPassword(user.getPassword());
         dto.setEmail(user.getEmail());

@@ -31,12 +31,13 @@ public class User extends AutidableEntity{
         this.isPasswordTemporary = Boolean.TRUE;
     }
 
-    public void update(String username, String password, String email, Boolean isPasswordTemporary, Boolean status) {
+    public void update(String username, String password, String email, Boolean isPasswordTemporary, Boolean status, String updateUser) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.isPasswordTemporary = isPasswordTemporary;
         this.status = status;
+        updateDataAutidablec(updateUser);
     }
 
     public void passwordUpdate(String username, String password, String email, Boolean isPasswordTemporary) {

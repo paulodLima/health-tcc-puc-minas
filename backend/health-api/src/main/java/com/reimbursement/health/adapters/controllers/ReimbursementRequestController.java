@@ -27,6 +27,7 @@ public class ReimbursementRequestController {
     @GetMapping
     public List<ReimbursementRequestDto> findAll() {
         return service.findAll().stream().map(reimbursementRequest -> ReimbursementRequestDto.builder()
+                .id(reimbursementRequest.getId().toString())
                 .inclusionUser(reimbursementRequest.getInclusionUser())
                 .updateDate(reimbursementRequest.getUpdateDate())
                 .updateUser(reimbursementRequest.getUpdateUser())

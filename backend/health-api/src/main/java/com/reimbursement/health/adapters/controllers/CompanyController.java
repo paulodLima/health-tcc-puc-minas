@@ -22,6 +22,7 @@ public class CompanyController {
     @GetMapping
     public List<CompanyDto> findAll() {
         return service.findAll().stream().map(company -> CompanyDto.builder()
+                .id(company.getId().toString())
                 .name(company.getName())
                 .status(company.getStatus())
                 .cnpj(company.getCnpj().getNumeroFormatado())

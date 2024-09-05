@@ -22,6 +22,7 @@ public class UserController {
     public List<UserDto> listUser() {
         var users = service.findAll();
         return users.stream().map(user -> UserDto.builder()
+                        .id(user.getId().toString())
                         .email(user.getEmail())
                         .status(user.getStatus())
                         .username(user.getUsername())
@@ -37,6 +38,7 @@ public class UserController {
     public UserDto listUser(@PathVariable UUID id) {
         var user = service.findById(id);
         return UserDto.builder()
+                .id(user.getId().toString())
                 .email(user.getEmail())
                 .status(user.getStatus())
                 .username(user.getUsername())

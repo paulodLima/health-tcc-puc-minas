@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReimbursementRequestDto {
+    private String id;
     private CompanyDto company;
     private UserDto user;
     private LocalDateTime inclusionDate;
