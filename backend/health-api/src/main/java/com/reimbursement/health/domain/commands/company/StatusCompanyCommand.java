@@ -7,5 +7,5 @@ import java.util.UUID;
 @Data
 public class StatusCompanyCommand {
     private UUID id;
-    private String updateUserv;
+    private String updateUser;
 }

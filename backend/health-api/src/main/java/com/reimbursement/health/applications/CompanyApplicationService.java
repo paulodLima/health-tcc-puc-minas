@@ -36,13 +36,13 @@ public class CompanyApplicationService {
 
     public void enable(StatusCompanyCommand command) {
         var company = repository.findById(command.getId()).orElseThrow();
-        company.enable(command.getUpdateUserv());
+        company.enable(command.getUpdateUser());
         repository.save(company);
     }
 
     public void disable(StatusCompanyCommand command) {
         var company = repository.findById(command.getId()).orElseThrow();
-        company.disable(command.getUpdateUserv());
+        company.disable(command.getUpdateUser());
         repository.save(company);
     }
     public void update(UpdateCompanyCommand command) {
