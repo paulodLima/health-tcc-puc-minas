@@ -83,17 +83,17 @@ class CompanyApplicationServiceTest {
 
     @Test
     void disable() {
-        var user = new CreateCompanyCommand();
-        user.setCnpj("59863414000197");
-        user.setName("company LTDA");
-        user.setStatus(Boolean.TRUE);
-        user.setInclusionUser("user inclusion");
+        var company = new CreateCompanyCommand();
+        company.setCnpj("59863414000197");
+        company.setName("company LTDA");
+        company.setStatus(Boolean.TRUE);
+        company.setInclusionUser("company inclusion");
 
-        var id = service.create(user);
+        var id = service.create(company);
 
         var userEnable = new StatusCompanyCommand();
         userEnable.setId(id);
-        userEnable.setUpdateUser("user update");
+        userEnable.setUpdateUser("company update");
 
         service.disable(userEnable);
 

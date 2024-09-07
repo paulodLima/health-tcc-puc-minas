@@ -6,6 +6,7 @@ import com.reimbursement.health.domain.commands.company.StatusCompanyCommand;
 import com.reimbursement.health.domain.commands.company.UpdateCompanyCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserCommand;
 import com.reimbursement.health.domain.dtos.CompanyDto;
+import com.reimbursement.health.domain.entities.Company;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,11 @@ public class CompanyController {
                 .updateUser(company.getUpdateUser())
                 .build()
         ).toList();
+    }
+
+    @GetMapping("{id}")
+    public Company findById(@PathVariable UUID id) {
+        return service.findById(id);
     }
 
     @PostMapping

@@ -1,8 +1,6 @@
 package com.reimbursement.health.adapters.repositories.jpa;
 
-import com.reimbursement.health.domain.entities.Company;
 import com.reimbursement.health.domain.entities.User;
-import com.reimbursement.health.domain.entities.valueobjects.CNPJ;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -22,9 +20,9 @@ class UserRepositoryTest {
     @Test
     public void testSaveAndFindUser(){
         var user = User.builder()
-                .username("test")
+                .name("test")
+                .login("test")
                 .email("test@test.com")
-                .password("test")
                 .inclusionUser("test")
                 .build();
 
@@ -32,7 +30,7 @@ class UserRepositoryTest {
         Optional<User> foundUser = userRepository.findById(savedUser.getId());
 
         assertThat(foundUser).isPresent();
-        assertThat(foundUser.get().getUsername()).isEqualTo("test");
+        assertThat(foundUser.get().getName()).isEqualTo("test");
         assertThat(foundUser.get().getEmail()).isEqualTo("test@test.com");
         assertTrue(foundUser.get().getStatus());
     }
@@ -40,9 +38,9 @@ class UserRepositoryTest {
     @Test
     public void testSaveAndUpdateUser(){
         var user = User.builder()
-                .username("test")
+                .name("test")
+                .login("test")
                 .email("test@test.com")
-                .password("test")
                 .inclusionUser("test")
                 .build();
 
@@ -52,17 +50,18 @@ class UserRepositoryTest {
         assertThat(foundUser).isPresent();
 
         String newName = "New Name";
+        String login = "New Name";
         String email = "p@mail.com";
         String updateUser = "testUser";
 
-        foundUser.get().update(newName,savedCompany.getPassword(),email,Boolean.FALSE,Boolean.FALSE,updateUser);
+        foundUser.get().update(newName,login,email,Boolean.FALSE,Boolean.FALSE,updateUser);
 
         userRepository.save(foundUser.get());
 
         Optional<User> updatedUser = userRepository.findById(foundUser.get().getId());
 
         assertThat(updatedUser).isPresent();
-        assertThat(updatedUser.get().getUsername()).isEqualTo("New Name");
+        assertThat(updatedUser.get().getName()).isEqualTo("New Name");
         assertThat(updatedUser.get().getEmail()).isEqualTo("p@mail.com");
         assertFalse(updatedUser.get().getStatus());
     }
@@ -70,9 +69,9 @@ class UserRepositoryTest {
     @Test
     public void testSaveAndDeleteUser(){
         var user = User.builder()
-                .username("test")
+                .name("test")
+                .login("test")
                 .email("test@test.com")
-                .password("test")
                 .inclusionUser("test")
                 .build();
 

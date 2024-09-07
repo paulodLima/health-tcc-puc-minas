@@ -1,4 +1,4 @@
-
+CREATE DATABASE keycloak;
 -- Ensure the uuid-ossp extension is available
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -9,8 +9,8 @@ CREATE TABLE tb_user (
     update_date TIMESTAMPTZ,
     inclusion_user VARCHAR(255),
     update_user VARCHAR(255),
-    username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    login VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     status BOOLEAN,
     is_password_temporary BOOLEAN

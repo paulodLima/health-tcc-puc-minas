@@ -1,3 +1,9 @@
+keycloak:
+  base-url: http://localhost:7080
+  client-id: admin-cli
+  username: admin
+  password: admin
+
 spring:
   application:
     name: health
@@ -17,7 +23,22 @@ spring:
           descriptor:
             sql:
               BasicBinder: TRACE
-
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: health-api
+            client-secret: 7XIJdLe36yyvHXoZfZZIAxDvpwl8MPfc
+            authorization-grant-type: authorization_code
+            scope: openid
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          keycloak:
+            issuer-uri: ${keycloak.base-url}/realms/health
+      resource-server:
+        jwt:
+          issuer-uri: ${keycloak.base-url}/realms/health
 logging:
   level:
     org.springframework.security: INFO

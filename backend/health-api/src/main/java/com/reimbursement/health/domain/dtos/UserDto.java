@@ -1,9 +1,13 @@
 package com.reimbursement.health.domain.dtos;
 
 import com.reimbursement.health.domain.entities.User;
+import jakarta.persistence.Column;
 import lombok.*;
+import org.keycloak.representations.idm.CredentialRepresentation;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -11,13 +15,13 @@ import java.time.LocalDateTime;
 @Builder
 public class UserDto {
     private String id;
-    private String username;
-    private String password;
+    private String name;
+    private String login;
     private String email;
     private Boolean status;
     private LocalDateTime inclusionDate;
-    private String inclusionUser;
     private LocalDateTime updateDate;
+    private String inclusionUser;
     private String updateUser;
 
     public static UserDto toDto(User user) {
@@ -25,14 +29,11 @@ public class UserDto {
 
         var dto  = new UserDto();
         dto.setId(user.getId().toString());
-        dto.setUsername(user.getUsername());
-        dto.setPassword(user.getPassword());
+        dto.setName(user.getName());
+        dto.setLogin(user.getLogin());
         dto.setEmail(user.getEmail());
         dto.setStatus(user.getStatus());
         dto.setInclusionDate(user.getInclusionDate());
-        dto.setInclusionUser(user.getInclusionUser());
-        dto.setUpdateDate(user.getUpdateDate());
-        dto.setUpdateUser(user.getUpdateUser());
 
         return dto;
     }

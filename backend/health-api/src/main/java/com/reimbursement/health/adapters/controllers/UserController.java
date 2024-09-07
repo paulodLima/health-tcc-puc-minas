@@ -3,9 +3,11 @@ package com.reimbursement.health.adapters.controllers;
 import com.reimbursement.health.applications.UserApplicationService;
 import com.reimbursement.health.domain.commands.users.CreateUserCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserCommand;
+import com.reimbursement.health.domain.commands.users.UpdateUserPasswordCommand;
 import com.reimbursement.health.domain.dtos.UserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -25,8 +27,8 @@ public class UserController {
                         .id(user.getId().toString())
                         .email(user.getEmail())
                         .status(user.getStatus())
-                        .username(user.getUsername())
-                        .password(user.getPassword())
+                        .name(user.getName())
+                        .login(user.getLogin())
                         .inclusionUser(user.getInclusionUser())
                         .inclusionDate(user.getInclusionDate())
                         .updateDate(user.getUpdateDate())
@@ -41,8 +43,8 @@ public class UserController {
                 .id(user.getId().toString())
                 .email(user.getEmail())
                 .status(user.getStatus())
-                .username(user.getUsername())
-                .password(user.getPassword())
+                .name(user.getName())
+                .login(user.getLogin())
                 .inclusionUser(user.getInclusionUser())
                 .inclusionDate(user.getInclusionDate())
                 .updateDate(user.getUpdateDate())
@@ -51,6 +53,7 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<UUID> createUser(@RequestBody CreateUserCommand command) {
         var userId = service.create(command);
         return ResponseEntity.created(URI.create("/api/user/" + userId)).body(userId);
@@ -59,12 +62,16 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void createUser(@PathVariable UUID id) {service.delete(id);}
 
-
     @PutMapping("/{id}")
     public void update(@PathVariable UUID id, @RequestBody UpdateUserCommand command) {
         if(!id.equals(command.getId())){
             throw new IllegalArgumentException("Id da url diferente do id do command");
         }
         service.update(command);
+    }
+
+    @PutMapping("/updatePassword")
+    public void update(@RequestBody UpdateUserPasswordCommand command) {
+        service.updatePassword(command);
     }
 }

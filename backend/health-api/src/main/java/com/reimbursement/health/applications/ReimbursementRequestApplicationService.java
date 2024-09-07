@@ -1,6 +1,7 @@
 package com.reimbursement.health.applications;
 
 import com.reimbursement.health.adapters.repositories.jpa.ReimbursementRequestRepository;
+import com.reimbursement.health.adapters.repositories.jpa.UserRepository;
 import com.reimbursement.health.domain.commands.reimbursement.CreateReimbursementRequestCommand;
 import com.reimbursement.health.domain.entities.ReimbursementRequest;
 import com.reimbursement.health.domain.enuns.ReimbursementStatus;
@@ -11,19 +12,19 @@ import java.util.List;
 @Service
 public class ReimbursementRequestApplicationService {
     private final ReimbursementRequestRepository repository;
-    private final UserApplicationService userApplicationService;
+    private final UserRepository userRepository;
     private final CompanyApplicationService companyApplicationService;
 
-    public ReimbursementRequestApplicationService(ReimbursementRequestRepository repository, UserApplicationService userApplicationService, CompanyApplicationService companyApplicationService) {
+    public ReimbursementRequestApplicationService(ReimbursementRequestRepository repository, UserRepository userRepository, CompanyApplicationService companyApplicationService) {
         this.repository = repository;
-        this.userApplicationService = userApplicationService;
+        this.userRepository = userRepository;
         this.companyApplicationService = companyApplicationService;
     }
 
     public List<ReimbursementRequest> findAll() {return repository.findAll();}
 
     public ReimbursementRequest create(CreateReimbursementRequestCommand command) {
-        var user = userApplicationService.findById(command.getUser());
+        var user = userRepository.findById(command.getUser()).orElseThrow();
         var company = companyApplicationService.findById(command.getCompany());
         var reimbursementStatus = converedStatus(command);
 
