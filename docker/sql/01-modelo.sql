@@ -71,3 +71,15 @@ CREATE TABLE tb_medical_requests (
     FOREIGN KEY (reimbursement_request_id) REFERENCES tb_reimbursement_requests(id)
 );
 
+CREATE TABLE tb_menu (
+    ID UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    TITULO VARCHAR(100) NOT NULL,
+    ICONE VARCHAR(100) NULL,
+    URL VARCHAR(300) NULL,
+    DESCRICAO VARCHAR(500) NULL,
+    MENU_PAI_ID UUID NULL
+);
+
+INSERT INTO tb_menu (id, titulo, icone, url, descricao, menu_pai_id) VALUES ('898bc02b-95bb-4b48-8b66-3c6f7c1ad5f4', 'Usuários', 'pi-users', '', 'usuarios', null);
+INSERT INTO tb_menu (id, titulo, icone, url, descricao, menu_pai_id) VALUES ('16b367ba-b8cd-4724-a633-f7084fbb9c8a', 'Configurações', 'pi-cog', '/login', 'teste', null);
+INSERT INTO tb_menu (id, titulo, icone, url, descricao, menu_pai_id) VALUES ('349bdd98-5b4b-4da7-99f4-3b0a3265bd62', 'Administrar', 'pi-user-edit', '/cadastro-usuario', 'Administrar usuarios', '898bc02b-95bb-4b48-8b66-3c6f7c1ad5f4');

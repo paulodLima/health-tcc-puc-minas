@@ -1,15 +1,22 @@
 package com.reimbursement.health.applications;
 
 import com.reimbursement.health.adapters.repositories.jpa.UserRepository;
+import com.reimbursement.health.applications.service.EmailService;
 import com.reimbursement.health.applications.service.KeycloackService;
+import com.reimbursement.health.applications.service.token.KeycloakGeneratedToken;
 import com.reimbursement.health.config.security.AuthenticationUtil;
 import com.reimbursement.health.domain.commands.users.CreateUserCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserPasswordCommand;
 import com.reimbursement.health.domain.dtos.UserDto;
 import com.reimbursement.health.domain.entities.User;
+import com.reimbursement.health.domain.records.GeneratedTokenRecord;
+import jakarta.transaction.Transactional;
+import org.keycloak.representations.AccessTokenResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.security.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -18,14 +25,16 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class UserApplicationService {
+public class UserApplicationService extends KeycloakGeneratedToken {
     private final UserRepository repository;
     public static final String REALM = "health";
     private final KeycloackService keycloackService;
+    private final EmailService emailService;
 
-    public UserApplicationService(UserRepository repository, KeycloackService keycloackService) {
+    public UserApplicationService(UserRepository repository, KeycloackService keycloackService, EmailService emailService) {
         this.repository = repository;
         this.keycloackService = keycloackService;
+        this.emailService = emailService;
     }
 
     public List<UserDto> findAll() {
@@ -64,21 +73,35 @@ public class UserApplicationService {
 
     }
 
-    public UUID create(CreateUserCommand command) {
-        var firstAndLastName = command.getName().split(" ");
-        var firstName = firstAndLastName[0];
-        var lastName = firstAndLastName[firstAndLastName.length - 1];
+    public ResponseEntity<String> create(CreateUserCommand command) {
+        UUID userId = null;
+        try {
+            var firstAndLastName = command.getName().split(" ");
+            var firstName = firstAndLastName[0];
+            var lastName = firstAndLastName[firstAndLastName.length - 1];
 
-        UUID id = keycloackService.createUser(REALM, command.getLogin(), firstName, lastName, command.getEmail());
+            userId = keycloackService.createUser(REALM, command.getLogin(), firstName, lastName, command.getEmail(), command.getPassword());
 
-        var user = User.builder()
-                .id(id)
-                .name(command.getName())
-                .login(command.getLogin())
-                .inclusionUser(AuthenticationUtil.getLogin())
-                .email(command.getEmail())
-                .build();
-        return repository.save(user).getId();
+            var user = User.builder()
+                    .id(userId)
+                    .name(command.getName())
+                    .login(command.getLogin())
+                    .inclusionUser(AuthenticationUtil.getLogin())
+                    .email(command.getEmail())
+                    .build();
+
+            repository.save(user);
+
+            getTokenAndSentEmail(command);
+
+            return ResponseEntity.created(URI.create("/api/user/" + userId)).body(userId.toString());
+        }
+        catch (Exception e) {
+            if (userId != null) {
+                keycloackService.deleteUser(REALM, userId);
+            }
+            return ResponseEntity.internalServerError().body("Error while creating user");
+        }
     }
 
     public void delete(UUID id) {
@@ -99,5 +122,18 @@ public class UserApplicationService {
 
     public void updatePassword(UpdateUserPasswordCommand command) {
         keycloackService.updatePasswordUser(command.getId(), REALM, command.getPassword());
+    }
+
+    public String generatedToken(GeneratedTokenRecord record) {
+        return generatedToken(record.username(),record.password());
+    }
+
+    public void getTokenAndSentEmail(CreateUserCommand command) {
+        var token = generatedToken(GeneratedTokenRecord.builder()
+                .username(command.getLogin())
+                .password(command.getPassword())
+                .build());
+
+        emailService.sendSimpleMessage(command.getEmail(),token,command.getName());
     }
 }

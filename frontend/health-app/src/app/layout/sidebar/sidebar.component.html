@@ -1,0 +1,35 @@
+<aside [class.minimized]="sidebarMinimized">
+  <div class="logo">
+    <span *ngIf="!sidebarMinimized">REEMBOLSO</span>
+    <a (click)="sidebarMinimized = !sidebarMinimized" class="boot">
+      <i class="pi pi-bars" style="font-size: 1.5rem"></i>
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li *ngFor="let item of menus">
+        <div  *ngIf="item?.items" class="menu-item" (click)="toggleSubMenu(item)">
+          <a>
+            <i class="pi i" [ngClass]="item.icon"></i>
+            <span *ngIf="!sidebarMinimized" class="span">{{ item.label }}</span>
+            <i  *ngIf="item?.items?.length" class="pi submenu-toggle" [ngClass]="item?.open ? 'pi-angle-up' : 'pi-angle-down'"></i>
+          </a>
+          <ul *ngIf="item?.open">
+            <li *ngFor="let subItem of item?.items">
+              <a [routerLink]="subItem?.routerLink" class="submenu">
+                <i class="pi i" [ngClass]="{'icon-margin-right': 'true', 'subItem.icon':'true'}"></i>
+                <i class="pi i" [ngClass]="subItem.icon"></i>
+                <span *ngIf="!sidebarMinimized" class="span-sub">{{ subItem.label }}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <a *ngIf="!item?.items" [routerLink]="item?.route">
+          <i class="pi i" [ngClass]="item.icon"></i>
+          <span *ngIf="!sidebarMinimized" class="span">{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+

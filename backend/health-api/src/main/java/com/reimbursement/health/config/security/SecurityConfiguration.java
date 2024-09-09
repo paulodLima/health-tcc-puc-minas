@@ -42,7 +42,9 @@ public class SecurityConfiguration {
                     return configuration;
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                        .requestMatchers("/api/user/reset-password").permitAll()
+                        .requestMatchers("/api/user/login").permitAll()
+                        .requestMatchers("/api/menus").permitAll()
                         .requestMatchers("/api/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()

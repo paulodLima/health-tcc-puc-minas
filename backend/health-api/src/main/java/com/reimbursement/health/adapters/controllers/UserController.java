@@ -1,10 +1,12 @@
 package com.reimbursement.health.adapters.controllers;
 
 import com.reimbursement.health.applications.UserApplicationService;
+import com.reimbursement.health.applications.service.EmailService;
 import com.reimbursement.health.domain.commands.users.CreateUserCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserPasswordCommand;
 import com.reimbursement.health.domain.dtos.UserDto;
+import com.reimbursement.health.domain.records.GeneratedTokenRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/user")
 @AllArgsConstructor
+@CrossOrigin("*")
 public class UserController {
     private final UserApplicationService service;
 
@@ -54,9 +57,8 @@ public class UserController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseEntity<UUID> createUser(@RequestBody CreateUserCommand command) {
-        var userId = service.create(command);
-        return ResponseEntity.created(URI.create("/api/user/" + userId)).body(userId);
+    public ResponseEntity<String> createUser(@RequestBody CreateUserCommand command) {
+        return service.create(command);
     }
 
     @DeleteMapping("/{id}")
@@ -70,8 +72,14 @@ public class UserController {
         service.update(command);
     }
 
-    @PutMapping("/updatePassword")
+    @PutMapping("/reset-password")
+    @CrossOrigin(origins = "*")
     public void update(@RequestBody UpdateUserPasswordCommand command) {
         service.updatePassword(command);
+    }
+
+    @PostMapping("/login")
+    public String  KeycloakTokenGenerator(@RequestBody GeneratedTokenRecord record) {
+        return service.generatedToken(record);
     }
 }

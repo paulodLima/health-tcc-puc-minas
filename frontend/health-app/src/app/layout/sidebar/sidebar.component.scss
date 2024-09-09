@@ -1,0 +1,119 @@
+aside {
+  width: 250px;
+  height: 100vh;
+  background-color: #3C4962;
+  color: #64748b;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  transition: width 0.3s;
+}
+aside.minimized {
+  width: 70px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.logo i {
+  margin-right: 10px;
+  color: #DBDDDE;
+}
+.boot{
+  display: flex;
+  margin-inline: auto;
+}
+.logo span {
+  font-size: 20px;
+  font-weight: bold;
+  color: #DBDDDE;
+}
+nav h3 {
+  font-size: 12px;
+  color: #DBDDDE;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+nav ul li {
+  margin-bottom: 10px;
+}
+nav ul li a {
+  display: flex;
+  align-items: center;
+  color: #DBDDDE;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+nav ul li a:hover, nav ul li a.active {
+  color: #DBDDDE;
+}
+nav ul li a i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+.content-container {
+  flex: 1;
+  padding: 16px;
+  background-color: #f8f9fa; /* Cor de fundo do conteúdo principal */
+  overflow-y: auto;
+}
+/* CSS */
+.p-sidebar.minimized {
+  width: 3rem; /* Adjust based on your preference */
+}
+
+.p-sidebar.minimized .pi {
+  font-size: 1.5rem; /* Adjust based on your preference */
+}
+.i {
+  font-size: 1.5rem; /* Adjust based on your preference */
+  margin-top:15px;
+  color: #DBDDDE;
+}
+.span{
+  margin-top:15px
+}
+.span-sub{
+  margin-top:15px;
+  font-size: 12px;
+  margin-right: 2rem;
+}
+.submenu i {
+  margin-top:10px;
+  font-size: 12px;
+  margin-right:30px;
+}
+.icon-margin-right {
+  margin-right: 2rem; /* Ajuste o valor conforme necessário */
+}
+.p-sidebar.minimized .p-sidebar-content {
+  display: none; /* Hide text or other content */
+}
+  @media (max-width: 768px) {
+    .footer-text {
+      display: none;
+    }
+  }
+a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+
+i.pi {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.submenu-toggle {
+  font-size: 0.9rem;
+  margin-left: auto;
+}

@@ -1,0 +1,30 @@
+<div class="flex justify-between items-center">
+  <h1>Menu</h1>
+  <p-button label="Novo" icon="pi pi-plus" (click)="novo(null)"></p-button>
+</div>
+<hr class="mb-3">
+<div class="card">
+    <p-treeTable [value]="menus" [scrollable]="true" [tableStyle]="{'min-width':'50rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Titulo</th>
+                <th>Icone</th>
+                <th>Ações</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+            <tr [ttRow]="rowNode">
+                <td>
+                    <p-treeTableToggler [rowNode]="rowNode" />
+                    {{ rowData.titulo }}
+                </td>
+                <td>{{ rowData.icone }}</td>
+                <td class="flex gap-2">
+                    <button pButton type="button" icon="pi pi-plus" class="p-button-rounded p-button-success" (click)="novo(rowData)"></button>
+                    <button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="alterar(rowData)"></button>
+                    <button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="excluir(rowData)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-treeTable>
+</div>

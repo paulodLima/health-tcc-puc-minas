@@ -1,0 +1,21 @@
+<form class="flex flex-col gap-2" [formGroup]="form" (ngSubmit)="salvar()">
+    <div class="flex flex-col gap-2">
+        <label for="titulo">Titulo</label>
+        <input id="titulo" pInputText name="titulo" type="text" formControlName="titulo"/>
+    </div>
+    <div class="flex flex-col gap-2">
+        <label for="icone">Icone</label>
+        <input id="icone" pInputText name="icone" type="text" formControlName="icone"/>
+    </div>
+    <div class="flex flex-col gap-2">
+        <label for="url">Url</label>
+        <input id="url" pInputText name="url" type="text" formControlName="url"/>
+    </div>
+    <div class="flex flex-col gap-2">
+        <label for="descricao">Descrição</label>
+        <input id="descricao" pInputText name="descricao" type="text" formControlName="descricao"/>
+    </div>
+    <div class="text-right">
+        <p-button type="submit" [disabled]="form.invalid">Salvar</p-button>
+    </div>
+</form>

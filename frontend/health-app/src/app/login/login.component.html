@@ -1,0 +1,18 @@
+<div class="login-container">
+  <div class="login-form">
+    <h2>Log in</h2>
+    <p>Please enter your details</p>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input type="email" formControlName="username" placeholder="Email">
+      </div>
+      <div class="form-group">
+        <input type="password" formControlName="password" placeholder="Password">
+      </div>
+      <div class="form-group remember-reset">
+        <a href="/reset-password" class="reset-password">Reset password</a>
+      </div>
+      <button type="submit" [disabled]="!loginForm.valid">Log In</button>
+    </form>
+  </div>
+</div>
