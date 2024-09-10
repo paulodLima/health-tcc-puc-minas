@@ -9,6 +9,7 @@ import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { FormModalMenuComponent } from './form-modal-menu/form-modal-menu.component';
 import { MenuDto } from './menu.interfaces';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import {TokenService} from "../../core/token.service";
 
 @Component({
   selector: 'app-menu',
@@ -24,9 +25,10 @@ export class MenuComponent implements OnInit {
   constructor(
     private _menuService: MenuService,
     private _dialogService: DialogService,
-    private _confirmationService: ConfirmationService, 
+    private _confirmationService: ConfirmationService,
+    private tokenService: TokenService,
   ) { }
-  
+
   private montarMenu(item: MenuDto): TreeNode {
     return {
       label: item.titulo,
@@ -34,10 +36,10 @@ export class MenuComponent implements OnInit {
       data: item,
       children: item.subMenus ? item.subMenus.map(x => this.montarMenu(x)) : []
     };
-  } 
+  }
 
   ngOnInit(): void {
-    this._menuService.listar().subscribe(itens => {        
+    this._menuService.listar(this.tokenService.roles).subscribe(itens => {
       this.menus = itens.map(item => this.montarMenu(item));
     });
   }

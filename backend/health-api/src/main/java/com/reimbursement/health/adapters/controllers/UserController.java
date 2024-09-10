@@ -7,6 +7,7 @@ import com.reimbursement.health.domain.commands.users.UpdateUserCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserPasswordCommand;
 import com.reimbursement.health.domain.dtos.UserDto;
 import com.reimbursement.health.domain.records.GeneratedTokenRecord;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -57,7 +58,7 @@ public class UserController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseEntity<String> createUser(@RequestBody CreateUserCommand command) {
+    public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserCommand command) {
         return service.create(command);
     }
 

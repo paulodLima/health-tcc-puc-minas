@@ -1,6 +1,6 @@
 <aside [class.minimized]="sidebarMinimized">
   <div class="logo">
-    <span *ngIf="!sidebarMinimized">REEMBOLSO</span>
+    <span *ngIf="!sidebarMinimized" pButton style=" background-color: initial;border:0;transition: none !important;" routerLink="/inicio">REEMBOLSO</span>
     <a (click)="sidebarMinimized = !sidebarMinimized" class="boot">
       <i class="pi pi-bars" style="font-size: 1.5rem"></i>
     </a>
@@ -16,7 +16,7 @@
           </a>
           <ul *ngIf="item?.open">
             <li *ngFor="let subItem of item?.items">
-              <a [routerLink]="subItem?.routerLink" class="submenu">
+              <a [routerLink]="subItem?.route" class="submenu">
                 <i class="pi i" [ngClass]="{'icon-margin-right': 'true', 'subItem.icon':'true'}"></i>
                 <i class="pi i" [ngClass]="subItem.icon"></i>
                 <span *ngIf="!sidebarMinimized" class="span-sub">{{ subItem.label }}</span>
@@ -31,5 +31,8 @@
       </li>
     </ul>
   </nav>
+  <div class="logo" style="margin: 0">
+    <p-button (onClick)="logout()" routerLink="/login">Sair</p-button>
+  </div>
 </aside>
 

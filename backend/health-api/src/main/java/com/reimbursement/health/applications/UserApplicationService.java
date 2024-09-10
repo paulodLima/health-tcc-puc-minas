@@ -73,6 +73,7 @@ public class UserApplicationService extends KeycloakGeneratedToken {
 
     }
 
+    @Transactional
     public ResponseEntity<String> create(CreateUserCommand command) {
         UUID userId = null;
         try {
@@ -100,7 +101,7 @@ public class UserApplicationService extends KeycloakGeneratedToken {
             if (userId != null) {
                 keycloackService.deleteUser(REALM, userId);
             }
-            return ResponseEntity.internalServerError().body("Error while creating user");
+            return ResponseEntity.internalServerError().body("Erro ao criar o usuario");
         }
     }
 
@@ -125,12 +126,12 @@ public class UserApplicationService extends KeycloakGeneratedToken {
     }
 
     public String generatedToken(GeneratedTokenRecord record) {
-        return generatedToken(record.username(),record.password());
+        return generatedToken(record.login(),record.password());
     }
 
     public void getTokenAndSentEmail(CreateUserCommand command) {
         var token = generatedToken(GeneratedTokenRecord.builder()
-                .username(command.getLogin())
+                .login(command.getLogin())
                 .password(command.getPassword())
                 .build());
 

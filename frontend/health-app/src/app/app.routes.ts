@@ -1,18 +1,19 @@
 import {Routes} from '@angular/router';
-import {AppComponent} from "./app.component";
-import {HomeComponent} from "./component/home/home.component";
+import {AuthGuard} from "./core/auth.guard";
 
 export const routes: Routes = [
     {
       path: '',
       loadComponent: () => import('./layout/layout.component').then(m => m.LayoutComponent),
+      canActivate: [AuthGuard],
       children: [
         {
           path: 'inicio',
           loadComponent: () => import('./component/home/home.component').then(m => m.HomeComponent)
         },{
           path: 'cadastro-usuario',
-          loadComponent: () => import('./component/user/user-form/create-user.component').then(m => m.CreateUserComponent)
+          loadComponent: () => import('./component/user/user-form/create-user.component').then(m => m.CreateUserComponent),
+          data: { roles: ['teste-erro'] }, canActivate: [AuthGuard]
         },
         {path: '', redirectTo: 'inicio', pathMatch: 'full'}
       ]

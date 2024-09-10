@@ -44,7 +44,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/user/reset-password").permitAll()
                         .requestMatchers("/api/user/login").permitAll()
-                        .requestMatchers("/api/menus").permitAll()
+                        .requestMatchers("/api/menus").hasAnyRole("ADMIN", "manager")
                         .requestMatchers("/api/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()

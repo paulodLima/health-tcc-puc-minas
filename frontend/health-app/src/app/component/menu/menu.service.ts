@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AlterarMenuCommand, CriarMenuCommand, MenuDto } from './menu.interfaces';
@@ -9,8 +9,9 @@ import { AlterarMenuCommand, CriarMenuCommand, MenuDto } from './menu.interfaces
 export class MenuService {
   constructor(private http: HttpClient) { }
 
-  listar(): Observable<MenuDto[]> {
-    return this.http.get<MenuDto[]>(`http://localhost:8080/api/menus`);
+    listar(token: string): Observable<MenuDto[]> {
+      const headers = this.getOptionsHeaders(token);
+    return this.http.get<MenuDto[]>(`http://localhost:8080/api/menus`,{headers});
   }
 
   pesquisar(id: string): Observable<MenuDto> {
@@ -27,5 +28,14 @@ export class MenuService {
 
   excluir(id: string): Observable<void> {
     return this.http.delete<void>(`http://localhost:8081/api/menus/${id}`);
+  }
+
+  getOptionsHeaders(token: string): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET',
+      'Authorization': `Bearer ${token}`
+    });
   }
 }

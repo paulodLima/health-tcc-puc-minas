@@ -11,6 +11,7 @@ import {LoginComponent} from "../../login/login.component";
 import {MenuService} from "../../component/menu/menu.service";
 import {MenuItem} from "primeng/api";
 import {MenuDto} from "../../component/menu/menu.interfaces";
+import {TokenService} from "../../core/token.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -38,13 +39,13 @@ export class SidebarComponent implements OnInit{
   sidebarVisible: boolean = true;
   sidebarMinimized: boolean = false;
 
-  constructor(private _menuService: MenuService) {
+  constructor(private _menuService: MenuService,private tokenService: TokenService) {
   }
 
   ngOnInit(): void {
-    this._menuService.listar().subscribe(menus => {
-      this.menus = menus.map(menu => this.toMenuItem(menu))
-      console.log('menus', this.menus);
+    const token = localStorage.getItem('access_token') ?? ''
+    this._menuService.listar(token).subscribe(menus => {
+      this.menus = this.filterMenu(menus.map(menu => this.toMenuItem(menu)));
     });
   }
 
@@ -59,24 +60,18 @@ export class SidebarComponent implements OnInit{
       open: false,
     };
   }
+  private filterMenu(menuItems: MenuItem[]): MenuItem[] {
+    return menuItems
+      .filter(item => this.isMenuItemVisible(item))
+      .map(item => ({
+        ...item,
+        items: item.items ? this.filterMenu(item.items) : []
+      }));
+  }
 
-  menuItems = [
-    {
-      label: 'Team', iconClass: 'pi-users', route: '/login', subMenu: [
-        {label: 'Create Team', route: '/team/create', iconClass: 'pi pi-plus'},
-        {label: 'View Teams', route: '/team/view', iconClass: 'pi pi-eye'}
-      ],
-      open: false
-    }
-    ,
-    {label: 'Messages', iconClass: 'pi-comments', route: '/reset-password'},
-    {
-      label: 'Settings', iconClass:
-        'pi-cog'
-    }
-    ,
-  ]
-  ;
+  logout() {
+    this.tokenService.logout();
+  }
 
   toggleSidebar() {
     this.sidebarVisible = !this.sidebarVisible;
@@ -95,5 +90,27 @@ export class SidebarComponent implements OnInit{
     if (item.items) {
       item.open = !item.open;
     }
+  }
+  private isMenuItemVisible(menuItem: MenuItem): boolean {
+    const userRoles = this.tokenService.getRolesUser();
+    if (menuItem.routerLink) {
+      const routeRoles = this.getRouteRoles(menuItem.routerLink);
+      return this.hasRequiredRole(routeRoles, userRoles);
+    }
+    return true; // Exibe o item se não houver rota ou roles especificadas
+  }
+
+  private getRouteRoles(route: string): string[] {
+    const routeRolesMap: { [key: string]: string[] } = {
+      '/home': ['user', 'admin'],
+      '/cadastro-usuario': ['manager']
+    };
+    return routeRolesMap[route] || [];
+  }
+
+  private hasRequiredRole(requiredRoles: string[], userRoles: string[]): boolean {
+    console.log('route role maps',requiredRoles, userRoles);
+    if (requiredRoles.length === 0) return true; // Se não houver roles exigidas, exibe o item
+    return requiredRoles.some(role => userRoles.includes(role));
   }
 }

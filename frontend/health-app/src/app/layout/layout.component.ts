@@ -3,6 +3,7 @@ import {RouterModule, RouterOutlet} from "@angular/router";
 import {SidebarComponent} from "./sidebar/sidebar.component";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {TokenService} from "../core/token.service";
 
 @Component({
   selector: 'app-layout',
@@ -12,5 +13,4 @@ import {FormsModule} from "@angular/forms";
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
-
 }

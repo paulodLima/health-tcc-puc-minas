@@ -19,7 +19,7 @@ export class UsuarioService {
   }
 
   pesquisar(id: string): Observable<UsuarioDto> {
-    return this.http.get<UsuarioDto>(`http://localhost:8081/api/usuarios/${id}`).pipe(take(1));
+    return this.http.get<UsuarioDto>(`http://localhost:8080/api/user/${id}`).pipe(take(1));
   }
 
   listar(): Observable<UsuarioDto[]> {

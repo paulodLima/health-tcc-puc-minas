@@ -6,6 +6,7 @@ import com.reimbursement.health.domain.commands.menus.CriarMenuCommand;
 import com.reimbursement.health.domain.dtos.MenuDto;
 import com.reimbursement.health.domain.entities.Menu;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

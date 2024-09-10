@@ -17,7 +17,6 @@ export class AuthService {
       password: newPassword,
       id: id
     };
-    console.log('chegando no put',command);
     return this.http.put<void>(`${this.apiUrl}/reset-password`, command).pipe(take(1));
   }
 }
