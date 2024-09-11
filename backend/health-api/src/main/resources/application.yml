@@ -7,7 +7,7 @@ keycloak:
 keycloak-realm:
   base-url: http://localhost:7080
   client-id: health-api
-  client-secret: VxxqSGvm8Uqeg9gFUSPfQpRsbxYNbMHs
+  client-secret: 5oj3ruNQKn4ShqsHu4rq0vTcfp8TsRZC
 
 spring:
   messages:
@@ -65,7 +65,7 @@ spring:
 
 logging:
   level:
-    org.springframework.security: INFO
+    org.springframework.security: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   pattern:
     console: "%d{dd-MM-yyyy HH:mm:ss} %magenta([%thread]) %highlight(%-5level) %logger.%M - %msg%n"

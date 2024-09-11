@@ -50,14 +50,17 @@ export class TokenService {
   logout() {
     localStorage.removeItem('access_token');
     this._authenticated.next(false);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
   }
   private getRoles(token: string): void {
     const tokenPayload = JSON.parse(atob(token.split('.')[1]));
     const role = tokenPayload.resource_access?.['health-api']?.roles || '';
     this.setRoles(role);
   }
-  public getRolesUser(): string[] {
+  public getRolesUser(token: string): string[] {
+    this.getRoles(token)
     return this.roles;
   }
 

@@ -39,9 +39,6 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._menuService.listar(this.tokenService.roles).subscribe(itens => {
-      this.menus = itens.map(item => this.montarMenu(item));
-    });
   }
 
   novo(menu: MenuDto | null) {

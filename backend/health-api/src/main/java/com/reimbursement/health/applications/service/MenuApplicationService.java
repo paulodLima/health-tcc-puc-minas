@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -29,6 +31,18 @@ public class MenuApplicationService {
                 .build();
         repository.save(menu);
 
+    }
+    public List<Menu> listarPorRole(String roleName) {
+        List<Menu> allMenus = repository.findByRoleName(roleName);
+
+        Set<UUID> submenuIds = allMenus.stream()
+                .flatMap(menu -> menu.getSubMenus().stream())
+                .map(Menu::getId)
+                .collect(Collectors.toSet());
+
+        return allMenus.stream()
+                .filter(menu -> !submenuIds.contains(menu.getId()))
+                .collect(Collectors.toList());
     }
 
     public List<Menu> listar() {

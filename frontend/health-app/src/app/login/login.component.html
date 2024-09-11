@@ -1,7 +1,10 @@
 <div class="login-container">
+  <div>
+    <img ngSrc="assets/logo.png" height="150" width="150" alt="" class="img">
+  </div>
   <div class="login-form">
-    <h2>Log in</h2>
-    <p>Please enter your details</p>
+    <h2>Faça login.</h2>
+    <p>Por favor, insira seus dados.</p>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <input type="email" formControlName="login" placeholder="Email">
@@ -10,9 +13,9 @@
         <input type="password" formControlName="password" placeholder="Password">
       </div>
       <div class="form-group remember-reset">
-        <a href="/reset-password" class="reset-password">Reset password</a>
+        <a href="/reset-password" class="reset-password">Redefinir senha</a>
       </div>
-      <button type="submit" [disabled]="!loginForm.valid">Log In</button>
+      <button type="submit" [disabled]="!loginForm.valid">Entrar</button>
     </form>
   </div>
 </div>

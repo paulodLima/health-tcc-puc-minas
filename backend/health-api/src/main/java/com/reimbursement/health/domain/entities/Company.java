@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @Entity
 @Table(name = "tb_companies")
@@ -21,6 +23,7 @@ public class Company extends AutidableEntity {
     @Builder
     public Company(String name, CNPJ cnpj, Boolean situation, String inclusionUser) {
         super(inclusionUser);
+        setId(UUID.randomUUID());
         this.name = name;
         this.cnpj = cnpj;
         this.status = situation;

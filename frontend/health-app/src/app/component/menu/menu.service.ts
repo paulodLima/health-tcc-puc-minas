@@ -1,17 +1,20 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { AlterarMenuCommand, CriarMenuCommand, MenuDto } from './menu.interfaces';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {AlterarMenuCommand, CriarMenuCommand, MenuDto} from './menu.interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
-    listar(token: string): Observable<MenuDto[]> {
-      const headers = this.getOptionsHeaders(token);
-    return this.http.get<MenuDto[]>(`http://localhost:8080/api/menus`,{headers});
+  listar(token: string, userRoles: string[]): Observable<MenuDto[]> {
+    const roleName = userRoles.length > 0 ? userRoles[0] : 'defaultRoleName';
+    const headers = this.getOptionsHeaders(token);
+    console.log(roleName);
+    return this.http.get<MenuDto[]>(`http://localhost:8080/api/menu/byRoleName/${roleName}`, {headers});
   }
 
   pesquisar(id: string): Observable<MenuDto> {

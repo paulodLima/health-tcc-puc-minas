@@ -6,13 +6,15 @@ import {LoginResponse, OidcSecurityService} from "angular-auth-oidc-client";
 import {HttpClient} from "@angular/common/http";
 import {Button} from "primeng/button";
 import {TokenService} from "../core/token.service";
+import {NgOptimizedImage} from "@angular/common";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    Button
+    Button,
+    NgOptimizedImage
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -32,7 +34,7 @@ export class LoginComponent {
       const { login, password } = this.loginForm.value;
       this.http.post('http://localhost:7080/realms/health/protocol/openid-connect/token', new URLSearchParams({
         client_id: 'health-api',
-        client_secret: 'VxxqSGvm8Uqeg9gFUSPfQpRsbxYNbMHs',
+        client_secret: '5oj3ruNQKn4ShqsHu4rq0vTcfp8TsRZC',
         grant_type: 'password',
         username: login,
         password: password,

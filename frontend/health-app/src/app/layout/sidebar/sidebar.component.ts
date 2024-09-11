@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {NgClass, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {Button, ButtonDirective} from "primeng/button";
-import {RouterLink, RouterOutlet} from "@angular/router";
+import {Router, RouterLink, RouterOutlet} from "@angular/router";
 import {Sidebar, SidebarModule} from "primeng/sidebar";
 import {HomeComponent} from "../../component/home/home.component";
 import {AvatarModule} from "primeng/avatar";
@@ -34,19 +34,22 @@ import {TokenService} from "../../core/token.service";
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent implements OnInit{
+export class SidebarComponent implements OnInit {
   @Output() toggleMinimize = new EventEmitter<void>();
   sidebarVisible: boolean = true;
   sidebarMinimized: boolean = false;
 
-  constructor(private _menuService: MenuService,private tokenService: TokenService) {
+  constructor(private _menuService: MenuService, private tokenService: TokenService, private router : Router) {
   }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('access_token') ?? ''
-    this._menuService.listar(token).subscribe(menus => {
-      this.menus = this.filterMenu(menus.map(menu => this.toMenuItem(menu)));
+    const token = localStorage.getItem('access_token') ?? '';
+    const userRoles = this.tokenService.getRolesUser(token);
+    this._menuService.listar(token, userRoles).subscribe(menus => {
+      this.menus = menus.map(menu => this.toMenuItem(menu));
+      console.log(this.menus)
     });
+
   }
 
   menus: any[] = [];
@@ -59,14 +62,6 @@ export class SidebarComponent implements OnInit{
       items: menu.subMenus.map(subMenu => this.toMenuItem(subMenu)),
       open: false,
     };
-  }
-  private filterMenu(menuItems: MenuItem[]): MenuItem[] {
-    return menuItems
-      .filter(item => this.isMenuItemVisible(item))
-      .map(item => ({
-        ...item,
-        items: item.items ? this.filterMenu(item.items) : []
-      }));
   }
 
   logout() {
@@ -81,36 +76,10 @@ export class SidebarComponent implements OnInit{
   @ViewChild('sidebarRef')
   sidebarRef! : Sidebar;
 
-  toggleSidebarMinimize() {
-    this.sidebarMinimized = !this.sidebarMinimized;
-  }
-
   toggleSubMenu(item: any
   ) {
     if (item.items) {
       item.open = !item.open;
     }
-  }
-  private isMenuItemVisible(menuItem: MenuItem): boolean {
-    const userRoles = this.tokenService.getRolesUser();
-    if (menuItem.routerLink) {
-      const routeRoles = this.getRouteRoles(menuItem.routerLink);
-      return this.hasRequiredRole(routeRoles, userRoles);
-    }
-    return true; // Exibe o item se não houver rota ou roles especificadas
-  }
-
-  private getRouteRoles(route: string): string[] {
-    const routeRolesMap: { [key: string]: string[] } = {
-      '/home': ['user', 'admin'],
-      '/cadastro-usuario': ['manager']
-    };
-    return routeRolesMap[route] || [];
-  }
-
-  private hasRequiredRole(requiredRoles: string[], userRoles: string[]): boolean {
-    console.log('route role maps',requiredRoles, userRoles);
-    if (requiredRoles.length === 0) return true; // Se não houver roles exigidas, exibe o item
-    return requiredRoles.some(role => userRoles.includes(role));
   }
 }

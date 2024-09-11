@@ -5,15 +5,15 @@ import com.reimbursement.health.domain.commands.menus.AlterarMenuCommand;
 import com.reimbursement.health.domain.commands.menus.CriarMenuCommand;
 import com.reimbursement.health.domain.dtos.MenuDto;
 import com.reimbursement.health.domain.entities.Menu;
+import com.reimbursement.health.domain.entities.Role;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/menus")
+@RequestMapping("/api/menu")
 @AllArgsConstructor
 public class MenuController {
 
@@ -28,6 +28,12 @@ public class MenuController {
     @GetMapping()
     public List<MenuDto> listar() {
         var menus = menuApplicationService.listar();
+        return menus.stream().map(MenuController::toDto).toList();
+    }
+
+    @GetMapping("/byRoleName/{roleName}")
+    public List<MenuDto> listarPorRoleName(@PathVariable String roleName) {
+        var menus = menuApplicationService.listarPorRole(roleName);
         return menus.stream().map(MenuController::toDto).toList();
     }
 
@@ -53,6 +59,7 @@ public class MenuController {
                 .icone(menu.getIcone())
                 .url(menu.getUrl())
                 .descricao(menu.getDescricao())
+                .roles(menu.getRoles().stream().map(Role::getNome).toList())
                 .subMenus(menu.getSubMenus().stream().map(MenuController::toDto).toList())
                 .build();
     }

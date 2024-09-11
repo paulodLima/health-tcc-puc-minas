@@ -1,5 +1,6 @@
 package com.reimbursement.health.domain.dtos;
 
+import com.reimbursement.health.domain.entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,4 +17,5 @@ public class MenuDto {
     private String url;
     private String descricao;
     private List<MenuDto> subMenus;
+    private List<String> roles;
 }

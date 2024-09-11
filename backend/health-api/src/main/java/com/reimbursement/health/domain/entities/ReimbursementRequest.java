@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -34,6 +35,7 @@ public class ReimbursementRequest extends AutidableEntity{
     @Builder
     public ReimbursementRequest(String inclusionUser,BigDecimal amount,Company company,User employee,ReimbursementStatus status) {
         super(inclusionUser);
+        setId(UUID.randomUUID());
         this.amount = amount;
         this.company = company;
         this.employee = employee;

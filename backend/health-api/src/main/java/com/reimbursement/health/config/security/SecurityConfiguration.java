@@ -44,11 +44,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/user/reset-password").permitAll()
                         .requestMatchers("/api/user/login").permitAll()
-                        .requestMatchers("/api/menus").hasAnyRole("ADMIN", "manager")
-                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "MANAGER")
-                        .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/actuator/**").permitAll()
-                        .anyRequest().permitAll());
+                        .requestMatchers("/api/menus/**").hasAnyRole("ADMIN", "MANAGER", "USER")
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().authenticated());
         http.oauth2ResourceServer((oauth2) -> oauth2
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakJwtConverter)));
         http.oauth2Login(Customizer.withDefaults())

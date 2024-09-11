@@ -36,6 +36,7 @@ export class ResetPasswordComponent implements OnInit{
   id!: string;
   password: any;
   Confirmpassword: any;
+  login = '/login'
 
   constructor(
     private fb: FormBuilder,

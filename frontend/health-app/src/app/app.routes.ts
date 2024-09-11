@@ -13,7 +13,12 @@ export const routes: Routes = [
         },{
           path: 'cadastro-usuario',
           loadComponent: () => import('./component/user/user-form/create-user.component').then(m => m.CreateUserComponent),
-          data: { roles: ['teste-erro'] }, canActivate: [AuthGuard]
+          data: { roles: ['admin','manager'] }, canActivate: [AuthGuard]
+        },
+        {
+          path: 'reembolso',
+          loadComponent: () => import('./component/reimbursement/reimbursement.component').then(m => m.ReimbursementComponent),
+          data: { roles: ['admin','manager','user'] }, canActivate: [AuthGuard]
         },
         {path: '', redirectTo: 'inicio', pathMatch: 'full'}
       ]

@@ -15,17 +15,16 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     const roles = route.data['roles'] as string[] | undefined;
-    console.log(roles)
     if (this.tokenService.isAuthenticated()) {
       if (Array.isArray(roles) && roles.length > 0) {
-        if (roles.every(role => this.tokenService.hasRole(role))) {
+        if (roles.some(role => this.tokenService.hasRole(role))) {
           return true;
         } else {
-          this.router.navigate(['/access-denied']);
+          this.router.navigate(['/inicio']);
           return false;
         }
       } else {
-        return true; // Não requer roles específicas
+        return true;
       }
     } else {
       this.router.navigate(['/login']);

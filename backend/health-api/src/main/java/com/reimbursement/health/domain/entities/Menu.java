@@ -1,5 +1,6 @@
 package com.reimbursement.health.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,15 @@ public class Menu extends Entity {
     private String icone;
     private String url;
     private String descricao;
+
+    @JsonManagedReference
+    @ManyToMany
+    @JoinTable(
+            name = "tb_menu_role",
+            joinColumns = @JoinColumn(name = "menu_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "menu_pai_id")
@@ -38,9 +48,11 @@ public class Menu extends Entity {
 
     public void adicionarSubMenu(Menu menu) {
         this.subMenus.add(menu);
+        menu.setMenuPai(this);
     }
 
     public void removerSubMenu(Menu menu) {
         this.subMenus.remove(menu);
+        menu.setMenuPai(null);
     }
 }
