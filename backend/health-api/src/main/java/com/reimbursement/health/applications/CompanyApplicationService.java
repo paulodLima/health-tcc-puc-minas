@@ -1,6 +1,7 @@
 package com.reimbursement.health.applications;
 
 import com.reimbursement.health.adapters.repositories.jpa.CompanyRepository;
+import com.reimbursement.health.config.security.AuthenticationUtil;
 import com.reimbursement.health.domain.commands.company.CreateCompanyCommand;
 import com.reimbursement.health.domain.commands.company.StatusCompanyCommand;
 import com.reimbursement.health.domain.commands.company.UpdateCompanyCommand;
@@ -25,7 +26,7 @@ public class CompanyApplicationService {
 
     public UUID create(CreateCompanyCommand command){
         var company = Company.builder()
-                .inclusionUser(command.getInclusionUser())
+                .inclusionUser(AuthenticationUtil.getLogin())
                 .name(command.getName())
                 .cnpj(new CNPJ(command.getCnpj()))
                 .situation(command.getStatus())
@@ -47,7 +48,7 @@ public class CompanyApplicationService {
     }
     public void update(UpdateCompanyCommand command) {
         var company = repository.findById(command.getId()).orElseThrow();
-        company.update(command.getName(),new CNPJ(command.getCnpj()),command.getStatus(),command.getUpdateUser());
+        company.update(command.getName(),new CNPJ(command.getCnpj()),command.getStatus(),AuthenticationUtil.getLogin());
         repository.save(company);
     }
 }

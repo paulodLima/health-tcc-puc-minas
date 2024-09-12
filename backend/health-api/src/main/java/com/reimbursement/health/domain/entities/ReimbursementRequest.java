@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -31,6 +32,11 @@ public class ReimbursementRequest extends AutidableEntity{
     @Convert(converter = ReimbursementStatusConverter.class)
     private ReimbursementStatus status;
 
+    @OneToMany(mappedBy = "reimbursementRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Invoice> invoices;
+
+    @OneToMany(mappedBy = "reimbursementRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<MedicalRequest> medicalRequests;
 
     @Builder
     public ReimbursementRequest(String inclusionUser,BigDecimal amount,Company company,User employee,ReimbursementStatus status) {

@@ -2,9 +2,7 @@ package com.reimbursement.health.adapters.controllers;
 
 import com.reimbursement.health.applications.ReimbursementRequestApplicationService;
 import com.reimbursement.health.domain.commands.reimbursement.CreateReimbursementRequestCommand;
-import com.reimbursement.health.domain.dtos.CompanyDto;
-import com.reimbursement.health.domain.dtos.ReimbursementRequestDto;
-import com.reimbursement.health.domain.dtos.UserDto;
+import com.reimbursement.health.domain.dtos.*;
 import com.reimbursement.health.domain.entities.ReimbursementRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +34,8 @@ public class ReimbursementRequestController {
                 .status(reimbursementRequest.getStatus().toString())
                 .company(CompanyDto.toDto(reimbursementRequest.getCompany()))
                 .user(UserDto.toDto(reimbursementRequest.getEmployee()))
+                .invoice(InvoiceDto.toDto(reimbursementRequest.getInvoices()))
+                .medical(MedicalDto.toDto(reimbursementRequest.getMedicalRequests()))
                 .build()).toList();
     }
 }

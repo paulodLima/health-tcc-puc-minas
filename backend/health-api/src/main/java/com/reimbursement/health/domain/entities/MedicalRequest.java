@@ -3,12 +3,15 @@ package com.reimbursement.health.domain.entities;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @Entity
-@Table(name = "TB_MEDICAL_REQUEST")
+@Table(name = "TB_MEDICAL_REQUESTS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MedicalRequest extends AutidableEntity{
 
@@ -18,4 +21,12 @@ public class MedicalRequest extends AutidableEntity{
 
     @Column(name = "file_url", nullable = false)
     private String fileUrl;
+
+    @Builder
+    public MedicalRequest(ReimbursementRequest reimbursementRequest, String fileUrl, String inclusionUser) {
+        super(inclusionUser);
+        setId(UUID.randomUUID());
+        this.reimbursementRequest = reimbursementRequest;
+        this.fileUrl = fileUrl;
+    }
 }

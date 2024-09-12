@@ -8,6 +8,7 @@ import com.reimbursement.health.domain.enuns.ReimbursementStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ReimbursementRequestApplicationService {
@@ -36,6 +37,10 @@ public class ReimbursementRequestApplicationService {
                 .status(reimbursementStatus)
                 .build();
         return repository.save(reimbursementRequest);
+    }
+
+    ReimbursementRequest findById(UUID id) {
+        return repository.findById(id).orElseThrow();
     }
 
     private static ReimbursementStatus converedStatus(CreateReimbursementRequestCommand command) {

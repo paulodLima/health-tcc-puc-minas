@@ -3,8 +3,11 @@ package com.reimbursement.health.domain.entities;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -17,4 +20,12 @@ public class Invoice extends AutidableEntity{
 
     @Column(name = "file_url", nullable = false)
     private String fileUrl;
+
+    @Builder
+    public Invoice(String title, String inclusionUser, String fileUrl,ReimbursementRequest reimbursementRequest) {
+        super(inclusionUser);
+        setId(UUID.randomUUID());
+        this.fileUrl = fileUrl;
+        this.reimbursementRequest = reimbursementRequest;
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,4 +24,6 @@ public class ReimbursementRequestDto {
     private String updateUser;
     private BigDecimal amount;
     private String status;
+    private List<MedicalDto> medical;
+    private List<InvoiceDto> invoice;
 }
