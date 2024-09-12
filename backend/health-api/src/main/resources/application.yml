@@ -10,6 +10,10 @@ keycloak-realm:
   client-secret: 5oj3ruNQKn4ShqsHu4rq0vTcfp8TsRZC
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   messages:
     basename: messages
     encoding: UTF-8
@@ -38,7 +42,7 @@ spring:
         registration:
           keycloak:
             client-id: health-api
-            client-secret: 7XIJdLe36yyvHXoZfZZIAxDvpwl8MPfc
+            client-secret: MuyShRtqmjBHiurKULLdvOi58cInnnRe
             authorization-grant-type: authorization_code
             scope: openid
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
@@ -62,6 +66,12 @@ spring:
           starttls:
             enable: true
 
+aws:
+  s3:
+    access-key-id: AKIAWXFA7CPMM4TP2VXY
+    secret-access-key: 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
+    region: us-east-1
+    bucket-name: mytccbuket
 
 logging:
   level:
