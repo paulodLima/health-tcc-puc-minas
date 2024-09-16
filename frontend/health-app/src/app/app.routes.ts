@@ -17,7 +17,8 @@ export const routes: Routes = [
         },
         {
           path: 'reembolso',
-          loadComponent: () => import('./component/reimbursement/reimbursement.component').then(m => m.ReimbursementComponent),
+          loadChildren: () => import('./component/reimbursement/reimbursement.module').then((m) => m.ReimbursementListModule),
+          //loadComponent: () => import('./component/reimbursement/reimbursement-list/reimbursement-list.component').then(m => m.ReimbursementListComponent),
           data: { roles: ['admin','manager','user'] }, canActivate: [AuthGuard]
         },
         {path: '', redirectTo: 'inicio', pathMatch: 'full'}

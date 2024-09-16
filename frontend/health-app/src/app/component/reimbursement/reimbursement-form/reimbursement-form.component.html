@@ -1,0 +1,65 @@
+<div class="is-size-3 has-text-centered mt-4 mb-4 is-uppercase has-text-weight-bold">Solicitar Reembolso</div>
+<nav class="panel">
+<form [formGroup]="form"  class="box " (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+  <div class="columns">
+    <div class="column">
+      <div class="field">
+        <label class="label">Empresa</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select formControlName="company">
+              <option selected>Selecione</option>
+              <option *ngFor="let empresa of companyDto" [value]="empresa.id">{{ empresa.name }}</option>
+            </select>
+          </div>
+        </div>
+        <p class="help is-danger" *ngIf="form.get('company')?.invalid && form.get('company')?.touched">
+          O campo Empresa é obrigatório.
+        </p>
+      </div>
+    </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">Valor</label>
+        <div class="control has-icons-left has-icons-right">
+          <input type="number" formControlName="amount" class="input" placeholder="Digite um valor">
+          <span class="icon is-small is-left">
+          <i class="fas fa-envelope">R$</i>
+        </span>
+        </div>
+        <p class="help is-danger" *ngIf="form.get('valor')?.invalid && form.get('valor')?.touched">
+          Valor é obrigatório e deve ser um número positivo.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column">
+      <div class="field">
+        <label class="label">Nota Fiscal</label>
+        <div class="control">
+          <input type="file" formControlName="invoiceUrl" class="input" accept=".jpg,.jpeg,.png"  (change)="onFileChange($event,'invoiceUrl')">
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">Receita Médica</label>
+        <div class="control">
+          <input type="file" formControlName="medicalUrl" class="input" accept=".jpg,.jpeg,.png"  (change)="onFileChange($event,'medicalUrl')">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field is-grouped">
+    <div class="control">
+      <button type="submit" class="button is-primary" [disabled]="form.invalid">Enviar</button>
+    </div>
+    <div class="control">
+      <button type="button" class="button is-light" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+</form>
+</nav>

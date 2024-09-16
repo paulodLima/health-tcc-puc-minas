@@ -20,6 +20,7 @@ import {OidcSecurityService} from "angular-auth-oidc-client";
 export class AppComponent implements OnInit {
   title = 'health-app';
   roles: string[] = []
+  uuid = '';
 
   private readonly oidcSecurityService = inject(OidcSecurityService);
 

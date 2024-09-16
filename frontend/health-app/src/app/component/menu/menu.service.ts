@@ -11,9 +11,9 @@ export class MenuService {
   }
 
   listar(token: string, userRoles: string[]): Observable<MenuDto[]> {
-    const roleName = userRoles.length > 0 ? userRoles[0] : 'defaultRoleName';
+    const sortedRoles = userRoles.slice().sort();
+    const roleName = sortedRoles.length > 0 ? sortedRoles[0] : 'defaultRoleName';
     const headers = this.getOptionsHeaders(token);
-    console.log(roleName);
     return this.http.get<MenuDto[]>(`http://localhost:8080/api/menu/byRoleName/${roleName}`, {headers});
   }
 

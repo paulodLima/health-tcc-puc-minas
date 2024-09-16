@@ -15,6 +15,7 @@ export class TokenService {
   private _authenticated = new BehaviorSubject<boolean>(false);
   roles: string[] = []; // Mude para um array se estiver lidando com múltiplas roles
   token: string = '';
+  uuid: string = '';
 
   constructor(private router: Router, private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User | null>(null);
@@ -63,5 +64,8 @@ export class TokenService {
     this.getRoles(token)
     return this.roles;
   }
-
+  public getIdUser(token: string){
+    const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+    return tokenPayload.sub;
+  }
 }
