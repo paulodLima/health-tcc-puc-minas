@@ -1,22 +1,27 @@
 package com.reimbursement.health.applications;
 
+import com.reimbursement.health.config.security.AuthenticationUtil;
 import com.reimbursement.health.domain.commands.company.CreateCompanyCommand;
 import com.reimbursement.health.domain.commands.company.StatusCompanyCommand;
 import com.reimbursement.health.domain.commands.company.UpdateCompanyCommand;
 import com.reimbursement.health.domain.entities.Company;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ActiveProfiles("test")
 class CompanyApplicationServiceTest {
 
     @Autowired
@@ -36,12 +41,13 @@ class CompanyApplicationServiceTest {
         company.setStatus(Boolean.TRUE);
         company.setInclusionUser("user inclusion");
 
-        UUID uuid = service.create(company);
-
-        var byId = service.findById(uuid);
-
-        assertNotNull(byId);
-        assertEquals(company.getName(), byId.getName());
+        try (MockedStatic<AuthenticationUtil> mockedAuthUtil = mockStatic(AuthenticationUtil.class)) {
+            mockedAuthUtil.when(AuthenticationUtil::getLogin).thenReturn("teste");
+            UUID uuid = service.create(company);
+            var byId = service.findById(uuid);
+            assertNotNull(byId);
+            assertEquals(company.getName(), byId.getName());
+        }
     }
 
     @Test
@@ -53,9 +59,11 @@ class CompanyApplicationServiceTest {
         user.setStatus(Boolean.TRUE);
         user.setInclusionUser("user inclusion");
 
-        var id = service.create(user);
-
-        assertNotNull(id);
+        try (MockedStatic<AuthenticationUtil> mockedAuthUtil = mockStatic(AuthenticationUtil.class)) {
+            mockedAuthUtil.when(AuthenticationUtil::getLogin).thenReturn("teste");
+            var id = service.create(user);
+            assertNotNull(id);
+        }
     }
 
     @Test
@@ -66,19 +74,21 @@ class CompanyApplicationServiceTest {
         user.setName("company LTDA");
         user.setStatus(Boolean.TRUE);
         user.setInclusionUser("user inclusion");
+        try (MockedStatic<AuthenticationUtil> mockedAuthUtil = mockStatic(AuthenticationUtil.class)) {
+            mockedAuthUtil.when(AuthenticationUtil::getLogin).thenReturn("teste");
+            var id = service.create(user);
 
-        var id = service.create(user);
+            var userEnable = new StatusCompanyCommand();
+            userEnable.setId(id);
+            userEnable.setUpdateUser("user update");
 
-        var userEnable = new StatusCompanyCommand();
-        userEnable.setId(id);
-        userEnable.setUpdateUser("user update");
+            service.enable(userEnable);
 
-        service.enable(userEnable);
+            var byId = service.findById(id);
 
-        var byId = service.findById(id);
-
-        assertNotNull(byId);
-        assertTrue(byId.getStatus());
+            assertNotNull(byId);
+            assertTrue(byId.getStatus());
+        }
     }
 
     @Test
@@ -88,19 +98,21 @@ class CompanyApplicationServiceTest {
         company.setName("company LTDA");
         company.setStatus(Boolean.TRUE);
         company.setInclusionUser("company inclusion");
+        try (MockedStatic<AuthenticationUtil> mockedAuthUtil = mockStatic(AuthenticationUtil.class)) {
+            mockedAuthUtil.when(AuthenticationUtil::getLogin).thenReturn("teste");
+            var id = service.create(company);
 
-        var id = service.create(company);
+            var userEnable = new StatusCompanyCommand();
+            userEnable.setId(id);
+            userEnable.setUpdateUser("company update");
 
-        var userEnable = new StatusCompanyCommand();
-        userEnable.setId(id);
-        userEnable.setUpdateUser("company update");
+            service.disable(userEnable);
 
-        service.disable(userEnable);
+            var byId = service.findById(id);
 
-        var byId = service.findById(id);
-
-        assertNotNull(byId);
-        assertFalse(byId.getStatus());
+            assertNotNull(byId);
+            assertFalse(byId.getStatus());
+        }
     }
 
     @Test
@@ -110,23 +122,25 @@ class CompanyApplicationServiceTest {
         createCompanyCommand.setName("company LTDA");
         createCompanyCommand.setStatus(Boolean.TRUE);
         createCompanyCommand.setInclusionUser("user inclusion");
+        try (MockedStatic<AuthenticationUtil> mockedAuthUtil = mockStatic(AuthenticationUtil.class)) {
+            mockedAuthUtil.when(AuthenticationUtil::getLogin).thenReturn("teste");
+            var id = service.create(createCompanyCommand);
 
-        var id = service.create(createCompanyCommand);
+            var updateCompanyCommand = new UpdateCompanyCommand();
+            updateCompanyCommand.setId(id);
+            updateCompanyCommand.setCnpj("18858694000168");
+            updateCompanyCommand.setName("new LTDA");
+            updateCompanyCommand.setStatus(Boolean.FALSE);
+            updateCompanyCommand.setUpdateUser("user update");
 
-        var updateCompanyCommand = new UpdateCompanyCommand();
-        updateCompanyCommand.setId(id);
-        updateCompanyCommand.setCnpj("18858694000168");
-        updateCompanyCommand.setName("new LTDA");
-        updateCompanyCommand.setStatus(Boolean.FALSE);
-        updateCompanyCommand.setUpdateUser("user update");
+            service.update(updateCompanyCommand);
 
-        service.update(updateCompanyCommand);
+            var byId = service.findById(id);
 
-        var byId = service.findById(id);
-
-        assertNotNull(byId);
-        assertFalse(byId.getStatus());
-        assertEquals(updateCompanyCommand.getName(), byId.getName());
-        assertNotEquals(updateCompanyCommand.getName(), createCompanyCommand.getName());
+            assertNotNull(byId);
+            assertFalse(byId.getStatus());
+            assertEquals(updateCompanyCommand.getName(), byId.getName());
+            assertNotEquals(updateCompanyCommand.getName(), createCompanyCommand.getName());
+        }
     }
 }

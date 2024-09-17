@@ -13,4 +13,6 @@ public class CreateUserCommand {
     private String password;
     @NotBlank
     private String email;
+    @NotBlank
+    private String perfil;
 }

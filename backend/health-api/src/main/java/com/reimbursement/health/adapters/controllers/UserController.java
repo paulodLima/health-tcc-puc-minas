@@ -57,7 +57,6 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserCommand command) {
         return service.create(command);
     }

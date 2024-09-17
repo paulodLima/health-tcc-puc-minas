@@ -9,11 +9,13 @@ import {NgIf} from "@angular/common";
 import {HomeComponent} from "./component/home/home.component";
 import {AvatarModule} from "primeng/avatar";
 import {OidcSecurityService} from "angular-auth-oidc-client";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, ButtonDirective, NgIf, AvatarModule],
+  providers: [MessageService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

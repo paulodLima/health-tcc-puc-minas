@@ -1,26 +1,26 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {UsuarioService} from "./usuario.service";
+import {UserService} from "./user.service";
 import {ConfirmationService} from "primeng/api";
-import {UsuarioDto} from "./usuario.interface";
+import {UserDto} from "./usuario.interface";
 
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [],
-  templateUrl: './user.component.html',
-  styleUrl: './user.component.scss'
+  templateUrl: './user-list/user.component.html',
+  styleUrl: './user-list/user.component.scss'
 })
 export class UserComponent implements OnInit {
-  registros: UsuarioDto[] = [];
+  registros: UserDto[] = [];
   constructor(
     private _confirmationService: ConfirmationService,
-    private _usuarioService: UsuarioService,
+    private _usuarioService: UserService,
     private _router: Router
   ) { }
 
   ngOnInit(): void {
-    this._usuarioService.listar().subscribe({
+    this._usuarioService.findAll().subscribe({
       next: (registros) => this.registros = registros
     });
   }

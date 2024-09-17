@@ -12,7 +12,7 @@ class ReimbursementRequestTest {
     @Test
     void update() {
         ReimbursementRequest request = new ReimbursementRequest();
-        request.update("test",BigDecimal.TWO,new Company(),new User(),ReimbursementStatus.PENDING);
+        request.update("test",BigDecimal.TWO,new Company(),new User());
 
         assertEquals("test", request.getUpdateUser());
         assertEquals(BigDecimal.TWO, request.getAmount());
@@ -24,7 +24,7 @@ class ReimbursementRequestTest {
         var reimbursementRequest = ReimbursementRequest.builder()
                 .amount(BigDecimal.TEN)
                 .company(new Company())
-                .employee(new User())
+                .user(new User())
                 .status(ReimbursementStatus.APPROVED)
                 .inclusionUser("test")
                 .build();

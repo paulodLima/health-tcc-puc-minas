@@ -27,7 +27,7 @@ public class EmailService {
         this.emailSender = emailSender;
     }
 
-    public void sendSimpleMessage(String to, String token, String name) {
+    public void senResetPasswordMessage(String to, String token, String name) {
         var subject = env.getProperty("email.subject.account-created");
         var bodyTemplate = env.getProperty("email.body.account-created");
         assert bodyTemplate != null;
@@ -36,6 +36,30 @@ public class EmailService {
                 .replace("{resetPasswordLink}", url.concat(token));
 
 
+        sendEmail(to, subject, body);
+    }
+    public void sendMessageOk(String to, String name) {
+        var subject = env.getProperty("email-status-ok.subjects");
+        var bodyTemplate = env.getProperty("email-status-ok.body");
+        assert bodyTemplate != null;
+        var body = bodyTemplate
+                .replace("{user}", name);
+
+        sendEmail(to, subject, body);
+    }
+
+    public void sendMessageRejecterd(String to, String name,String observation) {
+        var subject = env.getProperty("email-status-rejected.subjects");
+        var bodyTemplate = env.getProperty("email-status-rejected.body");
+        assert bodyTemplate != null;
+        var body = bodyTemplate
+                .replace("{user}", name)
+                .replace("{observation}",observation);
+
+        sendEmail(to, subject, body);
+    }
+
+    private void sendEmail(String to, String subject, String body) {
         try {
             MimeMessage message = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");

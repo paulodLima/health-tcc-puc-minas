@@ -1,1 +1,90 @@
-<p>create-user works!</p>
+<p-toast />
+<div class="is-size-3 has-text-centered mt-4 mb-4 is-uppercase has-text-weight-bold">Solicitar Reembolso</div>
+<nav class="panel">
+  <form [formGroup]="form"  class="box " (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <div class="columns">
+      <div class="column">
+        <div class="field">
+          <label class="label">Nome</label>
+          <div class="control has-icons-left has-icons-right">
+            <input type="text" formControlName="name" class="input" placeholder="Digite o nome">
+            <span class="icon is-small is-left">
+          <i class="pi pi-user"></i>
+        </span>
+          </div>
+          <p class="help is-danger" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+            O campo nome é obrigatório.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">E-mail</label>
+          <div class="control has-icons-left has-icons-right">
+            <input type="email" formControlName="email" class="input" placeholder="Digite o email">
+            <span class="icon is-small is-left">
+          <i class="pi pi-at"></i>
+        </span>
+          </div>
+          <p class="help is-danger" *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')">
+            O campo e-mail é obrigatório.
+          </p>
+          <p class="help is-danger" *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')">
+            O campo e-mail está inválido.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column">
+        <div class="field">
+          <label class="label">Login</label>
+          <div class="control has-icons-left has-icons-right">
+            <input type="text" formControlName="login" class="input" placeholder="Digite o login">
+            <span class="icon is-small is-left">
+          <i class="pi pi-id-card"></i>
+        </span>
+            <p class="help is-danger" *ngIf="form.get('login')?.touched && form.get('login')?.hasError('forbiddenChar')">
+              O login não deve conter espaços ou caracteres especiais.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">Perfil</label>
+          <div class="control has-icons-left has-icons-right">
+            <div class="select is-fullwidth">
+              <select formControlName="perfil">
+                <option *ngFor="let role of roles" [value]="role.value">
+                  {{ role.display }}
+                </option>
+              </select>
+            </div>
+            <span class="icon is-small is-left">
+          <i class="pi pi-building"></i>
+        </span>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">Senha</label>
+          <div class="control has-icons-left has-icons-right">
+            <p-password formControlName="password" [toggleMask]="true" class="p-password"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <button type="submit" class="button is-primary" [disabled]="form.invalid">Enviar</button>
+      </div>
+      <div class="control">
+        <button type="button" class="button is-light" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </form>
+</nav>

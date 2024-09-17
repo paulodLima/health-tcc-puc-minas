@@ -12,12 +12,9 @@ import com.reimbursement.health.domain.dtos.UserDto;
 import com.reimbursement.health.domain.entities.User;
 import com.reimbursement.health.domain.records.GeneratedTokenRecord;
 import jakarta.transaction.Transactional;
-import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.net.URI;
-import java.security.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -81,7 +78,7 @@ public class UserApplicationService extends KeycloakGeneratedToken {
             var firstName = firstAndLastName[0];
             var lastName = firstAndLastName[firstAndLastName.length - 1];
 
-            userId = keycloackService.createUser(REALM, command.getLogin(), firstName, lastName, command.getEmail(), command.getPassword());
+            userId = keycloackService.createUser(REALM, command.getLogin(), firstName, lastName, command.getEmail(), command.getPassword(),command.getPerfil());
 
             var user = User.builder()
                     .id(userId)
@@ -135,6 +132,6 @@ public class UserApplicationService extends KeycloakGeneratedToken {
                 .password(command.getPassword())
                 .build());
 
-        emailService.sendSimpleMessage(command.getEmail(),token,command.getName());
+        emailService.senResetPasswordMessage(command.getEmail(),token,command.getName());
     }
 }

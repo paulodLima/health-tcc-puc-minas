@@ -1,4 +1,4 @@
-
+<p-toast />
 <div class="is-size-3 has-text-centered mt-4 mb-4 is-uppercase has-text-weight-bold">Reembolso</div>
 <div>
   <p-table [value]="reimbursement" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }" class="mx-4 p-4	" #dt
@@ -27,7 +27,8 @@
         <th>Status</th>
         <th>Nota Fiscal</th>
         <th>Pedido Médico</th>
-        <th class="is-justify-content-center">Ações</th>
+        <th *ngIf="isAdmin" class="is-justify-content-center">Ações</th>
+        <th *ngIf="!isAdmin" class="is-justify-content-center">Observações</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-registro>
@@ -44,10 +45,12 @@
         <td class="p-2">
           <p-button icon="pi pi-eye" class="button is-hovered  is-small" [outlined]="true" pTooltip="Visualizar" (click)="visualizar(registro.medicalUrl)"/>
         </td>
-        <td class="p-2">
-              <p-toast />
+        <td class="p-2" *ngIf="isAdmin">
           <p-button icon="pi pi-check" class="button is-primary  is-small" [outlined]="true" pTooltip="Aprovar" (click)="approved(registro)"/>
           <p-button icon="pi pi-times" class="button is-danger ml-3  is-small" [outlined]="true" pTooltip="Rejeitar" (onClick)="showDialog(registro)"/>
+        </td>
+        <td class="mt-4" *ngIf="!isAdmin">
+          <p>{{registro.observation}}</p>
         </td>
         <p-confirmPopup />
       </tr>

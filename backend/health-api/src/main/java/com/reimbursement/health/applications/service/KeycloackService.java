@@ -78,7 +78,7 @@ public class KeycloackService {
         userResource.update(user);
     }
 
-    public UUID createUser(String realmName, String username, String firstName, String lastName, String email, String password) {
+    public UUID createUser(String realmName, String username, String firstName, String lastName, String email, String password,String roleUser) {
         Keycloak keycloak = login();
 
         RealmResource realmResource = keycloak.realm(realmName);
@@ -105,7 +105,7 @@ public class KeycloackService {
         List<RoleRepresentation> roles = keycloak.realm(realmName).roles().list();
 
         roles.stream()
-                .filter(r -> r.getName().equals("manager"))
+                .filter(r -> r.getName().equals(roleUser))
                 .findFirst().ifPresent(role -> keycloak.realm(realmName).users().get(uuid.toString()).roles().realmLevel().add(Collections.singletonList(role)));
 
         if (response.getStatus() == 201) {

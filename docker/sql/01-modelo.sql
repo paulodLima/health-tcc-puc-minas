@@ -34,6 +34,7 @@ CREATE TABLE tb_reimbursement_requests (
     employee_id UUID NOT NULL,
     inclusion_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     inclusion_user VARCHAR(255) NOT NULL,
+    observation VARCHAR(255) NOT NULL,
     status SMALLINT NOT NULL, -- Coluna para o status, agora numérica
     update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_user VARCHAR(255),
@@ -53,6 +54,7 @@ CREATE TABLE tb_invoices (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     inclusion_date TIMESTAMPTZ DEFAULT now(),
     update_date TIMESTAMPTZ DEFAULT now(),
+	s3_key VARCHAR(255),
     inclusion_user VARCHAR(255),
     update_user VARCHAR(255),
     reimbursement_request_id UUID NOT NULL,
@@ -63,6 +65,7 @@ CREATE TABLE tb_invoices (
 CREATE TABLE tb_medical_requests (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     inclusion_date TIMESTAMPTZ DEFAULT now(),
+	s3_key VARCHAR(255),
     update_date TIMESTAMPTZ DEFAULT now(),
     inclusion_user VARCHAR(255),
     update_user VARCHAR(255),

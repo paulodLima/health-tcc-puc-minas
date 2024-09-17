@@ -45,6 +45,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/user/reset-password").permitAll()
                         .requestMatchers("/api/user/login").permitAll()
                         .requestMatchers("/api/menus/**").hasAnyRole("ADMIN", "MANAGER", "USER")
+                        .requestMatchers("/api/reimbursement/**").hasAnyRole("ADMIN", "MANAGER", "USER")
+                        .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "MANAGER", "USER")
+                        .requestMatchers("/api/reimbursement/update-status/*").hasAnyRole("ADMIN", "MANAGER", "USER")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated());
         http.oauth2ResourceServer((oauth2) -> oauth2

@@ -13,10 +13,11 @@ import {ToastModule} from "primeng/toast";
 import {DropdownModule} from "primeng/dropdown";
 import {ConfirmPopupModule} from "primeng/confirmpopup";
 import {DialogModule} from "primeng/dialog";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgIf, NgOptimizedImage} from "@angular/common";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {Observable, switchMap, timer} from "rxjs";
+import {TokenService} from "../../../core/token.service";
 
 @Component({
   selector: 'app-reimbursement-list',
@@ -36,7 +37,8 @@ import {Observable, switchMap, timer} from "rxjs";
     FormsModule,
     NgOptimizedImage,
     ProgressSpinnerModule,
-    NgIf
+    NgIf,
+    ReactiveFormsModule
   ],
   providers: [
     MessageService,
@@ -57,16 +59,24 @@ export class ReimbursementListComponent implements OnInit {
   selectedRecord: ReimbursementResponseDto | null = null;
   observation = '';
   @ViewChild('dt') dt: Table | undefined;
-
-  constructor(private router: Router, private reimbursementService: ReimbursementService, private messageService: MessageService, private _confirmationService: ConfirmationService) {
+  userRoles: any;
+  isAdmin : boolean = false;
+  constructor(private router: Router, private reimbursementService: ReimbursementService, private messageService: MessageService, private _confirmationService: ConfirmationService,private tokenService:TokenService) {
   }
 
   ngOnInit(): void {
     this.findAllReimbursement();
+    this.userRoles = this.tokenService.getRolesUser(localStorage.getItem('access_token') ?? '');
+    this.isAdmin = this.checkIfAdminOrManager();
+  }
+
+  checkIfAdminOrManager(): boolean {
+    return this.userRoles.includes('admin') || this.userRoles.includes('manager');
   }
 
   findAllReimbursement() {
     this.reimbursementService.listAll().subscribe(reimbursements => {
+      console.log(reimbursements)
       this.reimbursement = reimbursements;
     })
   }

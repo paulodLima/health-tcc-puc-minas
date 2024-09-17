@@ -9,11 +9,13 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class CreateReimbursementRequestCommand {
+public class UpdateReimbursementRequestCommand {
+    private UUID id;
     private UUID user;
     private UUID company;
     private String inclusionUser;
     private BigDecimal amount;
     private MultipartFile medicalUrl;
     private MultipartFile invoiceUrl;
+    private Integer status;
 }

@@ -1,10 +1,13 @@
-package com.reimbursement.health.domain.dtos;
+package com.reimbursement.health.domain.dtos.response;
 
+import com.reimbursement.health.domain.dtos.CompanyDto;
+import com.reimbursement.health.domain.dtos.InvoiceDto;
+import com.reimbursement.health.domain.dtos.MedicalDto;
+import com.reimbursement.health.domain.dtos.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,16 +17,14 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReimbursementRequestDto {
+public class ReimbursementResponseDto {
     private String id;
-    private CompanyDto company;
-    private UserDto user;
+    private String company;
+    private String user;
     private LocalDateTime inclusionDate;
-    private String inclusionUser;
-    private LocalDateTime updateDate;
-    private String updateUser;
     private BigDecimal amount;
     private String status;
-    private List<MedicalDto> medical;
-    private List<InvoiceDto> invoice;
+    private String medicalUrl;
+    private String invoiceUrl;
+    private String observation;
 }
