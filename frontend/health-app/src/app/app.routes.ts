@@ -9,20 +9,21 @@ export const routes: Routes = [
       children: [
         {
           path: 'inicio',
-          loadComponent: () => import('./component/home/home.component').then(m => m.HomeComponent)
+          loadComponent: () => import('./component/home/home.component').then(m => m.HomeComponent),
+          data: { roles: ['admin','manager','user'] }
         },{
           path: 'usuario',
           loadChildren: () => import('./component/user/user.module').then((m) => m.UserModuleListModule),
           //loadComponent: () => import('./component/user/user-form/user-form.component').then(m => m.UserFormComponent),
-          data: { roles: ['admin','manager'] }, canActivate: [AuthGuard]
+          data: { roles: ['admin','manager'] }
         },
         {
           path: 'reembolso',
           loadChildren: () => import('./component/reimbursement/reimbursement.module').then((m) => m.ReimbursementListModule),
           //loadComponent: () => import('./component/reimbursement/reimbursement-list/reimbursement-list.component').then(m => m.ReimbursementListComponent),
-          data: { roles: ['admin','manager','user'] }, canActivate: [AuthGuard]
+          data: { roles: ['admin','manager','user'] }
         },
-        {path: '', redirectTo: 'inicio', pathMatch: 'full'}
+        {path: '', redirectTo: 'login', pathMatch: 'full'}
       ]
     },
     {

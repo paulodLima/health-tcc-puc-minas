@@ -44,7 +44,8 @@ export class AppComponent implements OnInit {
 
   private extractRolesFromToken(token: string): void {
     const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-    this.roles = tokenPayload.resource_access?.['health-api']?.roles || [];
+    this.roles = tokenPayload.resource_access?.['health-api']?.roles || tokenPayload.realm_access.roles;
+    console.log(this.roles)
   }
 
   isLoginOrResetPage(): boolean {

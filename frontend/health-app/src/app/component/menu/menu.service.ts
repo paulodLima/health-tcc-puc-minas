@@ -7,14 +7,15 @@ import {AlterarMenuCommand, CriarMenuCommand, MenuDto} from './menu.interfaces';
   providedIn: 'root'
 })
 export class MenuService {
+  desiredRoles: string[] = ["manager", "user", "admin"];
   constructor(private http: HttpClient) {
   }
 
   listar(token: string, userRoles: string[]): Observable<MenuDto[]> {
-    const sortedRoles = userRoles.slice().sort();
-    const roleName = sortedRoles.length > 0 ? sortedRoles[0] : 'defaultRoleName';
+    let role = this.getMatchingRole(userRoles);
+    console.log(role)
     const headers = this.getOptionsHeaders(token);
-    return this.http.get<MenuDto[]>(`http://localhost:8080/api/menu/byRoleName/${roleName}`, {headers});
+    return this.http.get<MenuDto[]>(`http://localhost:8080/api/menu/byRoleName/${role}`, {headers});
   }
 
   pesquisar(id: string): Observable<MenuDto> {
@@ -33,6 +34,9 @@ export class MenuService {
     return this.http.delete<void>(`http://localhost:8081/api/menus/${id}`);
   }
 
+  getMatchingRole(userRoles: string[]): string {
+    return userRoles.find(role => this.desiredRoles.includes(role)) || '';
+  }
   getOptionsHeaders(token: string): HttpHeaders {
     return new HttpHeaders({
       'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 <p-toast />
-<div class="is-size-3 has-text-centered mt-4 mb-4 is-uppercase has-text-weight-bold">Solicitar Reembolso</div>
+<div class="is-size-3 has-text-centered mt-4 mb-4 is-uppercase has-text-weight-bold">Cadastrar Usuário</div>
 <nav class="panel">
-  <form [formGroup]="form"  class="box " (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+  <form [formGroup]="form"  class="box " enctype="multipart/form-data">
     <div class="columns">
       <div class="column">
         <div class="field">
@@ -68,7 +68,7 @@
           </div>
         </div>
       </div>
-      <div class="column">
+      <div class="column" *ngIf="!isupdate">
         <div class="field">
           <label class="label">Senha</label>
           <div class="control has-icons-left has-icons-right">
@@ -76,11 +76,29 @@
           </div>
         </div>
       </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">Status</label>
+          <div class="control has-icons-left has-icons-right">
+            <div class="select is-fullwidth">
+              <select formControlName="status">
+                <option *ngFor="let status of status" [value]="status.value">
+                  {{ status.display }}
+                </option>
+              </select>
+            </div>
+            <span class="icon is-small is-left">
+          <i class="pi pi-check-circle"></i>
+        </span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="field is-grouped">
       <div class="control">
-        <button type="submit" class="button is-primary" [disabled]="form.invalid">Enviar</button>
+        <button *ngIf="!isupdate" type="submit" class="button is-primary" (click)="onSubmit()" [disabled]="form.invalid">Cadastrar</button>
+        <button *ngIf="isupdate" type="submit" class="button is-primary" (click)="update()" [disabled]="form.invalid">Atualizar</button>
       </div>
       <div class="control">
         <button type="button" class="button is-light" (click)="cancelar()">Cancelar</button>

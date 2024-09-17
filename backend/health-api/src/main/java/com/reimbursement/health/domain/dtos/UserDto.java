@@ -23,6 +23,7 @@ public class UserDto {
     private LocalDateTime updateDate;
     private String inclusionUser;
     private String updateUser;
+    private String perfil;
 
     public static UserDto toDto(User user) {
         if (user == null) return null;

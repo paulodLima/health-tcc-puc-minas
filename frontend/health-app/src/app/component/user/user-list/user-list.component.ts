@@ -129,4 +129,8 @@ export class UserListComponent implements OnInit {
     this.visible = false
     this.resetForm.reset();
   }
+
+  updateUser(registro: any) {
+    this.router.navigate([`/usuario/${registro.id}`]);
+  }
 }

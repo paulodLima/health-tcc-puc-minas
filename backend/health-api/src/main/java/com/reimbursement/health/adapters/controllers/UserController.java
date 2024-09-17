@@ -30,7 +30,7 @@ public class UserController {
     public List<UserDto> listUser() {
         var users = service.findAll();
         return users.stream().map(user -> UserDto.builder()
-                        .id(user.getId().toString())
+                        .id(user.getId())
                         .email(user.getEmail())
                         .status(user.getStatus())
                         .name(user.getName())
@@ -44,18 +44,7 @@ public class UserController {
     }
     @GetMapping("{id}")
     public UserDto listUser(@PathVariable UUID id) {
-        var user = service.findById(id);
-        return UserDto.builder()
-                .id(user.getId().toString())
-                .email(user.getEmail())
-                .status(user.getStatus())
-                .name(user.getName())
-                .login(user.getLogin())
-                .inclusionUser(user.getInclusionUser())
-                .inclusionDate(user.getInclusionDate())
-                .updateDate(user.getUpdateDate())
-                .updateUser(user.getUpdateUser())
-                .build();
+        return service.findById(id);
     }
 
     @PostMapping

@@ -57,7 +57,7 @@ export class TokenService {
   }
   private getRoles(token: string): void {
     const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-    const role = tokenPayload.resource_access?.['health-api']?.roles || '';
+    const role = tokenPayload.resource_access?.['health-api']?.roles || tokenPayload.realm_access.roles;
     this.setRoles(role);
   }
   public getRolesUser(token: string): string[] {

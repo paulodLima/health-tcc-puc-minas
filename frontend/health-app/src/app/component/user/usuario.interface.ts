@@ -1,6 +1,6 @@
 import {AbstractControl} from "@angular/forms";
 
-export interface UpdateUsuarioCommand {
+export interface UpdateUserCommand {
   id: string,
   nome: string,
   email: string,
@@ -8,7 +8,7 @@ export interface UpdateUsuarioCommand {
   status: boolean
 }
 
-export interface CreateUsuarioCommand {
+export interface CreateUserCommand {
   login: string,
   name: string,
   email: string,
@@ -26,10 +26,11 @@ export interface UpdateUserPasswordCommand {
 export interface UserDto {
   id: string,
   login: string,
-  nome: string,
+  name: string,
   email: string,
   status: boolean,
-  inclusionDate: Date
+  perfil: string,
+  inclusionDate: Date,
 }
 
 export function noSpecialCharsAndSpaces(control: AbstractControl) {

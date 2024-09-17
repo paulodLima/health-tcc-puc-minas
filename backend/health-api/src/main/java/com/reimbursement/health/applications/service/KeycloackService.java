@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -59,7 +60,22 @@ public class KeycloackService {
     public UserRepresentation getUser(String realmName, UUID id) {
         Keycloak keycloak = login();
 
-        return keycloak.realm(realmName).users().get(id.toString()).toRepresentation();
+        UserResource userResource = keycloak.realm(realmName).users().get(id.toString());
+
+        UserRepresentation user = userResource.toRepresentation();
+        List<RoleRepresentation> realmRoles = userResource.roles().realmLevel().listAll();
+
+        Set<String> desiredRoles = Set.of("manager", "user", "admin");
+
+        List<String> filteredRoleNames = realmRoles.stream()
+                .map(RoleRepresentation::getName)
+                .filter(desiredRoles::contains)
+                .collect(Collectors.toList());
+
+        user.setRealmRoles(filteredRoleNames);
+
+
+        return user;
     }
 
     public void editUser(UUID userId, String realmName, String firstName, String lastName, String email) {

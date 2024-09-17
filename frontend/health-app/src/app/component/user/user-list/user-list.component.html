@@ -23,28 +23,30 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th>Nome</th>
-        <th>Login</th>
-        <th>email</th>
-        <th>Status</th>
-        <th>Data de inclusão</th>
-        <th>Ações</th>
+        <th class="text-center">Nome</th>
+        <th class="text-center">Login</th>
+        <th class="text-center">email</th>
+        <th class="text-center">Status</th>
+        <th class="text-center">Data de inclusão</th>
+        <th class="text-center">Ações</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-registro>
       <tr>
-        <td class="p-2">{{ registro.name }}</td>
-        <td class="p-2">{{ registro.login }}</td>
-        <td class="p-2">{{ registro.email }}</td>
-        <td class="p-2">{{ registro.status == true ? 'Ativo' : 'Inativo' }}</td>
-        <td class="p-2">{{ registro.inclusionDate | date:'dd/MM/yyyy' }}</td>
-        <td class="p-2">
+        <td class="p-2 text-center">{{ registro.name }}</td>
+        <td class="p-2 text-center">{{ registro.login }}</td>
+        <td class="p-2 text-center">{{ registro.email }}</td>
+        <td class="p-2 text-center">{{ registro.status == true ? 'Ativo' : 'Inativo' }}</td>
+        <td class="p-2 text-center">{{ registro.inclusionDate | date:'dd/MM/yyyy' }}</td>
+        <td class="p-2 text-center">
           <p-button *ngIf="!registro.status" icon="pi pi-check" class="button is-primary  is-small" [outlined]="true"
                     pTooltip="Ativar" (click)="ativar(registro)"/>
           <p-button *ngIf="registro.status" icon="pi pi-times" class="button is-danger ml-3  is-small" [outlined]="true"
                     pTooltip="Inativar" (onClick)="inativar(registro)"/>
           <p-button icon="pi pi-key" class="button is-primary ml-3  is-small" [outlined]="true"
                     pTooltip="Reset senha" (onClick)="showDialog(registro)"/>
+          <p-button icon="pi pi-user-edit" class="button is-warning ml-3  is-small" [outlined]="true"
+                    pTooltip="Editar" (onClick)="updateUser(registro)"/>
         </td>
         <p-confirmPopup/>
       </tr>

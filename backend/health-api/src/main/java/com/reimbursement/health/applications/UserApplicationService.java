@@ -11,6 +11,7 @@ import com.reimbursement.health.domain.commands.users.UpdateUserPasswordCommand;
 import com.reimbursement.health.domain.dtos.ApiResponseDto;
 import com.reimbursement.health.domain.dtos.UserDto;
 import com.reimbursement.health.domain.entities.User;
+import com.reimbursement.health.domain.entities.UserBaseData;
 import com.reimbursement.health.domain.records.GeneratedTokenRecord;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserApplicationService extends KeycloakGeneratedToken {
@@ -38,14 +42,26 @@ public class UserApplicationService extends KeycloakGeneratedToken {
     public List<UserDto> findAll() {
         var users = keycloackService.getUsers(REALM);
 
-        return users.stream().map(user -> UserDto.builder()
-                .id(user.getId())
-                .name(user.getFirstName() + " " + user.getLastName())
-                .email(user.getEmail())
-                .login(user.getUsername())
-                .status(user.isEnabled())
-                .inclusionDate(converterDate(user.getCreatedTimestamp()))
-                .build()).toList();
+        var userBase = repository.findAll();
+
+        Map<String, UserBaseData> userBaseStatusMap = userBase.stream()
+                .collect(Collectors.toMap(user -> user.getId().toString(),
+                        user -> new UserBaseData(user.getStatus(), user.getName())));
+
+        return users.stream()
+                .filter(user -> userBaseStatusMap.containsKey(user.getId())) // Filtra usuários presentes em userBase
+                .map(user -> {
+                    UserBaseData userBaseData = userBaseStatusMap.get(user.getId());
+                    return UserDto.builder()
+                            .id(user.getId())
+                            .name(userBaseData.getName())
+                            .email(user.getEmail())
+                            .login(user.getUsername())
+                            .status(userBaseData.getStatus())
+                            .inclusionDate(converterDate(user.getCreatedTimestamp()))
+                            .build();
+                })
+                .toList();
     }
 
     private LocalDateTime converterDate(Long createdTimestamp) {
@@ -56,6 +72,9 @@ public class UserApplicationService extends KeycloakGeneratedToken {
     public UserDto findById(UUID id) {
         User user = repository.findById(id).orElseThrow();
         var userKeycloak = keycloackService.getUser(REALM, id);
+        var role = (userKeycloak.getRealmRoles() != null && !userKeycloak.getRealmRoles().isEmpty())
+               ? userKeycloak.getRealmRoles().getFirst()
+               : "";
 
         return UserDto.builder()
                 .id(userKeycloak.getId())
@@ -66,7 +85,10 @@ public class UserApplicationService extends KeycloakGeneratedToken {
                 .inclusionDate(converterDate(userKeycloak.getCreatedTimestamp()))
                 .inclusionUser(user.getInclusionUser())
                 .updateDate(user.getUpdateDate())
+                .perfil(role)
+                .status(user.getStatus())
                 .updateUser(user.getUpdateUser())
+
                 .build();
 
     }

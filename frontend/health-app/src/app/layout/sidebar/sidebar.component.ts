@@ -45,14 +45,11 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     const token = localStorage.getItem('access_token') ?? '';
     const userRoles = this.tokenService.getRolesUser(token);
-    const roleName = userRoles.length > 0 ? userRoles[0] : 'defaultRoleName';
-
     this._menuService.listar(token, userRoles).subscribe(menus => {
       this.menus = menus.map(menu => this.toMenuItem(menu));
     });
 
   }
-
   menus: any[] = [];
 
   private toMenuItem(menu: MenuDto): MenuItem {

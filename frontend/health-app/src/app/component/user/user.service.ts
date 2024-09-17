@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {UpdateUsuarioCommand, CreateUsuarioCommand, UserDto, UpdateUserPasswordCommand} from './usuario.interface';
+import {UpdateUserCommand, CreateUserCommand, UserDto, UpdateUserPasswordCommand} from './usuario.interface';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable, take } from 'rxjs';
 
@@ -10,13 +10,16 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  update(command: UpdateUsuarioCommand): Observable<void> {
-    return this.http.put<void>(`http://localhost:8080/api/user/${command.id}`, command).pipe(take(1));
+  update(command: UpdateUserCommand): Observable<void> {
+    const headers = this.getOptionsHeaders();
+    console.log(command.id)
+    return this.http.put<void>(`http://localhost:8080/api/user/${command.id}`, command,{headers}).pipe(take(1));
   }
 
 
   findById(id: string): Observable<UserDto> {
-    return this.http.get<UserDto>(`http://localhost:8080/api/user/${id}`).pipe(take(1));
+    const headers = this.getOptionsHeaders();
+    return this.http.get<UserDto>(`http://localhost:8080/api/user/${id}`,{headers}).pipe(take(1));
   }
 
   findAll(): Observable<UserDto[]> {
@@ -31,7 +34,7 @@ export class UserService {
   enabled(id: string): Observable<void> {
     return this.http.put<void>(`http://localhost:8080/api/user/${id}/ativar`, null).pipe(take(1));
   }
-  create(command: CreateUsuarioCommand): Observable<string> {
+  create(command: CreateUserCommand): Observable<string> {
     const headers = this.getOptionsHeaders();
     return this.http.post<string>(`http://localhost:8080/api/user`, command,{headers}).pipe(take(1));
   }
