@@ -2,6 +2,7 @@ package com.reimbursement.health.applications.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class EmailService {
     @Autowired
     private Environment env;
     private final JavaMailSender emailSender;
-    private final String url = "http://localhost:4200/reset/token?";
+    private final String url = "http://localhost:4200/reset/";
 
     @Value("${spring.mail.username}")
     private String email;
@@ -27,7 +28,7 @@ public class EmailService {
         this.emailSender = emailSender;
     }
 
-    public void senResetPasswordMessage(String to, String token, String name) {
+    public void sendResetPasswordCreatedMessage(String to, String token, String name) {
         var subject = env.getProperty("email.subject.account-created");
         var bodyTemplate = env.getProperty("email.body.account-created");
         assert bodyTemplate != null;
@@ -84,5 +85,17 @@ public class EmailService {
         } catch (MessagingException e) {
             log.error("Falha ao enviar e-mail: {}", e.getMessage());
         }
+    }
+
+    public void sendResetPasswordMessage(String email, String token, String name) {
+        var subject = env.getProperty("email.subject.account-created");
+        var bodyTemplate = env.getProperty("email.body.account-reset");
+        assert bodyTemplate != null;
+        var body = bodyTemplate
+                .replace("{user}", name)
+                .replace("{resetPasswordLink}", url.concat(token));
+
+
+        sendEmail(email, subject, body);
     }
 }

@@ -22,10 +22,10 @@ import {MyMessageService} from "../../../services/MyMessageService";
     ToastModule
   ],
   providers: [MyMessageService],
-  templateUrl: './create-user.component.html',
-  styleUrl: './create-user.component.scss'
+  templateUrl: './user-form.component.html',
+  styleUrl: './user-form.component.scss'
 })
-export class CreateUserComponent implements OnInit{
+export class UserFormComponent implements OnInit{
   form : FormGroup = new FormGroup({
     name: new FormControl<string | null>(null, [Validators.required]),
     email: new FormControl<string | null>(null, [Validators.required, Validators.email]),
@@ -50,6 +50,7 @@ export class CreateUserComponent implements OnInit{
       this.userService.create(user).subscribe({
         next: (response) => {
           this.messageService.addSucess(['Usuário criado com sucesso!']);
+          this.route.navigate(['/cadastro-usuario']);
         },
         error: (err) => {
           const errorMessages = err.error.errors || ['Ocorreu um erro inesperado.'];
@@ -61,6 +62,6 @@ export class CreateUserComponent implements OnInit{
   }
 
   cancelar() {
-
+    this.route.navigate(['/cadastro-usuario']);
   }
 }

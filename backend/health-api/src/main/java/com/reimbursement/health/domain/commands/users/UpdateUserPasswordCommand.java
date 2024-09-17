@@ -8,4 +8,6 @@ import java.util.UUID;
 public class UpdateUserPasswordCommand {
     private UUID id;
     private String password;
+    private String login;
+    private String email;
 }

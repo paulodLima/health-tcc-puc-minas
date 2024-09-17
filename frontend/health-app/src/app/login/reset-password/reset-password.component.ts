@@ -9,6 +9,7 @@ import {Ripple} from "primeng/ripple";
 import {PasswordModule} from "primeng/password";
 import {CheckboxModule} from "primeng/checkbox";
 import { jwtDecode } from "jwt-decode";
+import {UpdateUserPasswordCommand} from "./reset-password.interface";
 
 @Component({
   selector: 'app-reset-password',
@@ -42,7 +43,7 @@ export class ResetPasswordComponent implements OnInit{
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private activatedRoute: ActivatedRoute
   ) {
     this.resetForm = this.fb.group({
       confirmPassword: ['', Validators.required],
@@ -50,15 +51,27 @@ export class ResetPasswordComponent implements OnInit{
     }, { validator: this.passwordMatchValidator });
   }
 
+  ngOnInit(): void {
+    this.activatedRoute.params.subscribe(params => {
+      this.token = params['token'];
+      console.log(params)
+      if (this.token) {
+        this.decodeToken(this.token);
+      }
+    });
+  }
+
   onSubmit(): void {
-    console.log(this.resetForm.value);
     if (this.resetForm.invalid) {
       return;
     }
 
     const { newPassword, confirmPassword } = this.resetForm.value;
-
-    this.authService.resetPassword(this.id, confirmPassword).subscribe({
+    const command: UpdateUserPasswordCommand = {
+      password: confirmPassword,
+      id: this.id,
+    };
+    this.authService.resetPassword(command).subscribe({
       next: () => {
         this.successMessage = 'Senha redefinida com sucesso!';
         setTimeout(() => this.router.navigate(['/login']), 3000);
@@ -67,19 +80,11 @@ export class ResetPasswordComponent implements OnInit{
     });
   }
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.token = params['token'];
-      if (this.token) {
-        this.decodeToken(this.token);
-      }
-    });
-  }
-
   decodeToken(token: string): void {
     try {
       const decoded: any = jwtDecode(token);
       this.id = decoded.sub;
+      console.log('id',this.id)
     } catch (error) {
       this.router.navigate(['/login']);
       console.error('Erro ao decodificar o token:', error);

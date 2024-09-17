@@ -5,10 +5,12 @@ import com.reimbursement.health.applications.service.EmailService;
 import com.reimbursement.health.domain.commands.users.CreateUserCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserPasswordCommand;
+import com.reimbursement.health.domain.dtos.ApiResponseDto;
 import com.reimbursement.health.domain.dtos.UserDto;
 import com.reimbursement.health.domain.records.GeneratedTokenRecord;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserCommand command) {
+    public ResponseEntity<ApiResponseDto> createUser(@RequestBody @Valid CreateUserCommand command) {
         return service.create(command);
     }
 
@@ -74,8 +76,9 @@ public class UserController {
 
     @PutMapping("/reset-password")
     @CrossOrigin(origins = "*")
-    public void update(@RequestBody UpdateUserPasswordCommand command) {
+    public ResponseEntity<?> update(@RequestBody UpdateUserPasswordCommand command) {
         service.updatePassword(command);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @PostMapping("/login")

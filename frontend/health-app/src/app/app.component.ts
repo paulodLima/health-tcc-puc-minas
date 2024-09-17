@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {SidebarComponent} from "./layout/sidebar/sidebar.component";
 import {LoginComponent} from "./login/login.component";
-import {CreateUserComponent} from "./component/user/user-form/create-user.component";
+import {UserFormComponent} from "./component/user/user-form/user-form.component";
 import {ButtonDirective} from "primeng/button";
 import {ResetPasswordComponent} from "./login/reset-password/reset-password.component";
 import {NgIf} from "@angular/common";

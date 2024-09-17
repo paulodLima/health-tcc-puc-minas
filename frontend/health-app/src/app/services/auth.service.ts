@@ -12,11 +12,7 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  resetPassword(id: string, newPassword: string): Observable<any> {
-    const command = {
-      password: newPassword,
-      id: id
-    };
+  resetPassword(command : UpdateUserPasswordCommand): Observable<any> {
     return this.http.put<void>(`${this.apiUrl}/reset-password`, command).pipe(take(1));
   }
 }

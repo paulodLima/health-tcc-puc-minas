@@ -11,8 +11,9 @@ export const routes: Routes = [
           path: 'inicio',
           loadComponent: () => import('./component/home/home.component').then(m => m.HomeComponent)
         },{
-          path: 'cadastro-usuario',
-          loadComponent: () => import('./component/user/user-form/create-user.component').then(m => m.CreateUserComponent),
+          path: 'usuario',
+          loadChildren: () => import('./component/user/user.module').then((m) => m.UserModuleListModule),
+          //loadComponent: () => import('./component/user/user-form/user-form.component').then(m => m.UserFormComponent),
           data: { roles: ['admin','manager'] }, canActivate: [AuthGuard]
         },
         {
@@ -25,7 +26,7 @@ export const routes: Routes = [
       ]
     },
     {
-      path: 'reset-password',
+      path: 'reset/:token',
       loadComponent: () => import('./login/reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
     },
     {

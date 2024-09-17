@@ -8,13 +8,14 @@ import com.reimbursement.health.config.security.AuthenticationUtil;
 import com.reimbursement.health.domain.commands.users.CreateUserCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserCommand;
 import com.reimbursement.health.domain.commands.users.UpdateUserPasswordCommand;
+import com.reimbursement.health.domain.dtos.ApiResponseDto;
 import com.reimbursement.health.domain.dtos.UserDto;
 import com.reimbursement.health.domain.entities.User;
 import com.reimbursement.health.domain.records.GeneratedTokenRecord;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.net.URI;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -71,7 +72,7 @@ public class UserApplicationService extends KeycloakGeneratedToken {
     }
 
     @Transactional
-    public ResponseEntity<String> create(CreateUserCommand command) {
+    public ResponseEntity<ApiResponseDto> create(CreateUserCommand command) {
         UUID userId = null;
         try {
             var firstAndLastName = command.getName().split(" ");
@@ -90,15 +91,15 @@ public class UserApplicationService extends KeycloakGeneratedToken {
 
             repository.save(user);
 
-            getTokenAndSentEmail(command);
+            getTokenAndSentEmailCreated(command);
 
-            return ResponseEntity.created(URI.create("/api/user/" + userId)).body(userId.toString());
+            return ResponseEntity.ok(new ApiResponseDto("Usuário criado com sucesso"));
         }
         catch (Exception e) {
             if (userId != null) {
                 keycloackService.deleteUser(REALM, userId);
             }
-            return ResponseEntity.internalServerError().body("Erro ao criar o usuario");
+            return ResponseEntity.internalServerError().body(new ApiResponseDto("Erro ao criar o usuario"));
         }
     }
 
@@ -120,18 +121,35 @@ public class UserApplicationService extends KeycloakGeneratedToken {
 
     public void updatePassword(UpdateUserPasswordCommand command) {
         keycloackService.updatePasswordUser(command.getId(), REALM, command.getPassword());
+        if (command.getEmail() != null) {
+            getTokenAndSentEmailReset(CreateUserCommand.builder()
+                    .email(command.getEmail())
+                    .password(command.getPassword())
+                    .name(command.getLogin())
+                    .login(command.getLogin())
+                    .build());
+        }
     }
 
     public String generatedToken(GeneratedTokenRecord record) {
         return generatedToken(record.login(),record.password());
     }
 
-    public void getTokenAndSentEmail(CreateUserCommand command) {
+    public void getTokenAndSentEmailCreated(CreateUserCommand command) {
         var token = generatedToken(GeneratedTokenRecord.builder()
                 .login(command.getLogin())
                 .password(command.getPassword())
                 .build());
 
-        emailService.senResetPasswordMessage(command.getEmail(),token,command.getName());
+        emailService.sendResetPasswordCreatedMessage(command.getEmail(),token,command.getName());
+    }
+
+    public void getTokenAndSentEmailReset(CreateUserCommand command) {
+        var token = generatedToken(GeneratedTokenRecord.builder()
+                .login(command.getLogin())
+                .password(command.getPassword())
+                .build());
+
+        emailService.sendResetPasswordMessage(command.getEmail(),token,command.getName());
     }
 }

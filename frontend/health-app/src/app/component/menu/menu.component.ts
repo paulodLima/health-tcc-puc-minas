@@ -15,7 +15,7 @@ import {TokenService} from "../../core/token.service";
   selector: 'app-menu',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TreeTableModule, ButtonModule],
-  providers: [DialogService],
+  providers: [DialogService,ConfirmationService],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })

@@ -91,8 +91,17 @@ Sua conta foi criada com sucesso! Para completar o processo, por favor, defina s
 
 Caso o e-mail não apareça, favor verificar a caixa de spam ou lixeira.<br><br>
 
-Se você não solicitou a criação de uma conta, por favor, ignore este e-mail.
-"
+Se você não solicitou a criação de uma conta, por favor, ignore este e-mail."
+    account-reset: "Olá, {user}<br><br>
+    
+    Segue o link para redefinir sua senha:<br><br>
+    
+    <a href=\"{resetPasswordLink}\">Redefina sua senha aqui</a><br><br>
+    
+    Caso o e-mail não apareça, favor verificar a caixa de spam ou lixeira.<br><br>
+    
+    Se você não solicitou a criação de uma conta, por favor, ignore este e-mail.
+    "
 
 email-status-ok:
   subjects: "Solicitação de Reembolso"

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UpdateUsuarioCommand, CreateUsuarioCommand, UserDto } from './usuario.interface';
+import {UpdateUsuarioCommand, CreateUsuarioCommand, UserDto, UpdateUserPasswordCommand} from './usuario.interface';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable, take } from 'rxjs';
 
@@ -20,7 +20,8 @@ export class UserService {
   }
 
   findAll(): Observable<UserDto[]> {
-    return this.http.get<UserDto[]>(`http://localhost:8080/api/user`).pipe(take(1));
+    const headers = this.getOptionsHeaders();
+    return this.http.get<UserDto[]>(`http://localhost:8080/api/user`,{headers}).pipe(take(1));
   }
 
   disabled(id: string): Observable<void> {
@@ -30,9 +31,9 @@ export class UserService {
   enabled(id: string): Observable<void> {
     return this.http.put<void>(`http://localhost:8080/api/user/${id}/ativar`, null).pipe(take(1));
   }
-  create(command: CreateUsuarioCommand): Observable<void> {
+  create(command: CreateUsuarioCommand): Observable<string> {
     const headers = this.getOptionsHeaders();
-    return this.http.post<void>(`http://localhost:8080/api/user`, command,{headers}).pipe(take(1));
+    return this.http.post<string>(`http://localhost:8080/api/user`, command,{headers}).pipe(take(1));
   }
   private getOptionsHeaders() {
     const token = localStorage.getItem('access_token') ?? '';
@@ -40,5 +41,10 @@ export class UserService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
+  }
+
+  resetPassword(command: UpdateUserPasswordCommand): Observable<string> {
+    const headers = this.getOptionsHeaders();
+    return this.http.put<string>(`http://localhost:8080/api/user`, command,{headers}).pipe(take(1));
   }
 }

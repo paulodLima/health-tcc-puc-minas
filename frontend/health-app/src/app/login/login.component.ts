@@ -34,7 +34,7 @@ export class LoginComponent {
       const { login, password } = this.loginForm.value;
       this.http.post('http://localhost:7080/realms/health/protocol/openid-connect/token', new URLSearchParams({
         client_id: 'health-api',
-        client_secret: 'MuyShRtqmjBHiurKULLdvOi58cInnnRe',
+        client_secret: '5oj3ruNQKn4ShqsHu4rq0vTcfp8TsRZC',
         grant_type: 'password',
         username: login,
         password: password,
