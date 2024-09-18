@@ -52,4 +52,9 @@ export class ReimbursementService {
     const headers = this.getOptionsHeadersUpload();
     return this.http.put<string>(`http://localhost:8080/api/reimbursement/${id}`, command, {headers}).pipe(take(1));
   }
+
+  findAllById(id: string): Observable<ReimbursementResponseDto[]>  {
+    const headers = this.getOptionsHeaders();
+    return this.http.get<ReimbursementResponseDto[]>(`http://localhost:8080/api/reimbursement/find-user/${id}`, {headers}).pipe(take(1));
+  }
 }

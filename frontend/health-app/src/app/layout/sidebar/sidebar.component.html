@@ -16,7 +16,7 @@
           </a>
           <ul *ngIf="item?.open">
             <li *ngFor="let subItem of item?.items">
-              <a [routerLink]="subItem?.routerLink" class="submenu">
+              <a [routerLink]="subItem.label === 'Minhas Solicitações' ? '/reembolso/lista/'.concat(userId) : subItem.routerLink" class="submenu">
                 <i class="pi i" [ngClass]="{'icon-margin-right': 'true', 'subItem.icon':'true'}"></i>
                 <i class="pi i" [routerLink]="subItem?.routerLink" [ngClass]="subItem.icon"></i>
                 <span *ngIf="!sidebarMinimized" [routerLink]="subItem?.routerLink" class="span-sub">{{ subItem.label }}</span>

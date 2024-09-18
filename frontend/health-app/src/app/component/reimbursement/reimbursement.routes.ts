@@ -6,6 +6,10 @@ export const reimbursementRoutes: Routes = [
     loadComponent: () => import('./reimbursement-list/reimbursement-list.component').then((m) => m.ReimbursementListComponent)
   },
   {
+    path: 'lista/:id',
+    loadComponent: () => import('./reimbursement-list/reimbursement-list.component').then((m) => m.ReimbursementListComponent)
+  },
+  {
     path: 'new',
     loadComponent: () => import('./reimbursement-form/reimbursement-form.component').then((m) => m.ReimbursementFormComponent)
   },

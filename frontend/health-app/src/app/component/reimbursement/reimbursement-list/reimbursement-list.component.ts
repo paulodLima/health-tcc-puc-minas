@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ReimbursementResponseDto, UpdateStatus} from "../reimbursement.interface";
 import {StatusInfo} from "../reimbursement.interface";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {ReimbursementService} from "../reimbursement.service";
 import {Button, ButtonDirective} from "primeng/button";
 import {Table, TableModule} from "primeng/table";
@@ -60,14 +60,24 @@ export class ReimbursementListComponent implements OnInit {
   observation = '';
   @ViewChild('dt') dt: Table | undefined;
   userRoles: any;
-  isAdmin : boolean = false;
-  constructor(private router: Router, private reimbursementService: ReimbursementService, private messageService: MessageService, private _confirmationService: ConfirmationService,private tokenService:TokenService) {
+  isAdmin: boolean = false;
+  id = '';
+
+  constructor(private router: Router, private reimbursementService: ReimbursementService, private _activatedRoute: ActivatedRoute, private messageService: MessageService, private _confirmationService: ConfirmationService, private tokenService: TokenService) {
   }
 
   ngOnInit(): void {
-    this.findAllReimbursement();
     this.userRoles = this.tokenService.getRolesUser(localStorage.getItem('access_token') ?? '');
     this.isAdmin = this.checkIfAdminOrManager();
+    this._activatedRoute.params.subscribe((params) => {
+      if (params['id']) {
+        this.reimbursementService.findAllById(params['id']).subscribe((reimbursement) => {
+          this.reimbursement = reimbursement;
+        });
+      } else {
+        this.findAllReimbursement();
+      }
+    });
   }
 
   checkIfAdminOrManager(): boolean {
@@ -76,7 +86,6 @@ export class ReimbursementListComponent implements OnInit {
 
   findAllReimbursement() {
     this.reimbursementService.listAll().subscribe(reimbursements => {
-      console.log(reimbursements)
       this.reimbursement = reimbursements;
     })
   }
@@ -151,7 +160,9 @@ export class ReimbursementListComponent implements OnInit {
       this.loading = false; // Remove o spinner quando o timer expira
     });
   }
+
   private readonly MIN_LOADING_TIME = 500;
+
   private startLoadingTimer(): Observable<void> {
     return timer(this.MIN_LOADING_TIME).pipe(
       switchMap(() => {
@@ -165,7 +176,12 @@ export class ReimbursementListComponent implements OnInit {
       })
     );
   }
+
   onImageLoad() {
     this.loading = false; // Imagem carregada
+  }
+
+  editar(registro: any) {
+    this.router.navigate([`/reembolso/${registro.id}`]);
   }
 }

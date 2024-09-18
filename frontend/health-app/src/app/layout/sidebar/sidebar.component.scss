@@ -1,8 +1,9 @@
 aside {
   width: 250px;
   height: 100vh;
-  background-color: #3C4962;
-  color: #64748b;
+  background: linear-gradient(to bottom, rgba(103, 220, 255, 0.63) 30%, rgba(88, 125, 255, 0.73) 70%);
+  color: black;
+
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
@@ -18,7 +19,7 @@ aside.minimized {
 }
 .logo i {
   margin-right: 10px;
-  color: #DBDDDE;
+  color: black;
 }
 .boot{
   display: flex;
@@ -27,11 +28,11 @@ aside.minimized {
 .logo span {
   font-size: 20px;
   font-weight: bold;
-  color: #DBDDDE;
+  color: black;
 }
 nav h3 {
   font-size: 12px;
-  color: #DBDDDE;
+  color: black;
   margin-top: 20px;
   margin-bottom: 10px;
 }
@@ -45,12 +46,12 @@ nav ul li {
 nav ul li a {
   display: flex;
   align-items: center;
-  color: #DBDDDE;
+  color: black;
   text-decoration: none;
   transition: color 0.3s;
 }
 nav ul li a:hover, nav ul li a.active {
-  color: #DBDDDE;
+  color: black;
 }
 nav ul li a i {
   margin-right: 10px;
@@ -60,7 +61,7 @@ nav ul li a i {
 .content-container {
   flex: 1;
   padding: 16px;
-  background-color: #f8f9fa; /* Cor de fundo do conteúdo principal */
+  background-color: black; /* Cor de fundo do conteúdo principal */
   overflow-y: auto;
 }
 /* CSS */
@@ -74,7 +75,7 @@ nav ul li a i {
 .i {
   font-size: 1.5rem; /* Adjust based on your preference */
   margin-top:15px;
-  color: #DBDDDE;
+  color: black;
 }
 .span{
   margin-top:15px

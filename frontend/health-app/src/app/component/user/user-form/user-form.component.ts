@@ -75,7 +75,7 @@ export class UserFormComponent implements OnInit{
       this.userService.create(user).subscribe({
         next: (response) => {
           this.messageService.addSucess(['Usuário criado com sucesso!']);
-          this.route.navigate(['/cadastro-usuario']);
+          this.route.navigate(['/usuario']);
         },
         error: (err) => {
           const errorMessages = err.error.errors || ['Ocorreu um erro inesperado.'];

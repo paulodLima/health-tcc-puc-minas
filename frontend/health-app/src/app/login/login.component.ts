@@ -46,6 +46,7 @@ export class LoginComponent {
       }).subscribe(
         (response: any) => {
           localStorage.setItem('access_token', response.access_token);
+          console.log(response.access_token)
           this.tokenService.setAuthenticated(true);
           this.router.navigate(['/inicio']);
         },

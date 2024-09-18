@@ -31,7 +31,7 @@ import {loadEsmModuleFromMemory} from "@angular-devkit/build-angular/src/utils/s
 export class ReimbursementFormComponent implements OnInit {
   companyDto: CompanyDto[] = [];
   files: { [key: string]: File | null } = {};
-
+  id = '';
   form : FormGroup = new FormGroup({
     id: new FormControl<string | null>(null),
     user: new FormControl<string | null>(null),
@@ -51,11 +51,15 @@ export class ReimbursementFormComponent implements OnInit {
     this._activatedRoute.params.subscribe((params) => {
       if (params['id']) {
         this.reimbursementService.findById(params['id']).subscribe((reimbursement) => {
+          console.log(reimbursement)
+          this.id = reimbursement.id;
           this.form.patchValue({
+            id: reimbursement.id,
             userName: reimbursement.user,
             amount: reimbursement.amount,
             companyName: reimbursement.company,
-            id: reimbursement.id
+            medicalUrl: reimbursement.medicalUrl,
+            invoiceUrl: reimbursement.invoiceUrl,
           });
         });
       }
@@ -72,7 +76,8 @@ export class ReimbursementFormComponent implements OnInit {
       formData.append('medicalUrl', this.files['medicalUrl']!, this.files['medicalUrl']!.name);
       formData.append('invoiceUrl', this.files['invoiceUrl']!, this.files['invoiceUrl']!.name);
 
-      if (this.form.value.id) {
+      console.log(this.id)
+      if (this.id) {
         this.update(formData);
       } else {
         this.create(formData);

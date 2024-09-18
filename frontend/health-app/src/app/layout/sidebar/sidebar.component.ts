@@ -38,15 +38,22 @@ export class SidebarComponent implements OnInit {
   @Output() toggleMinimize = new EventEmitter<void>();
   sidebarVisible: boolean = true;
   sidebarMinimized: boolean = false;
-
+  userId = '';
   constructor(private _menuService: MenuService, private tokenService: TokenService, private router : Router) {
   }
 
   ngOnInit(): void {
     const token = localStorage.getItem('access_token') ?? '';
+    this.userId = this.tokenService.getIdUser(token);
     const userRoles = this.tokenService.getRolesUser(token);
     this._menuService.listar(token, userRoles).subscribe(menus => {
-      this.menus = menus.map(menu => this.toMenuItem(menu));
+      this.menus = menus.map(menu => {
+        console.log(userRoles)
+        if (userRoles.includes('user')) {
+          menu.subMenus = menu.subMenus.filter(sub => sub.titulo !== 'Lista');
+        }
+        return this.toMenuItem(menu);
+      });
     });
 
   }

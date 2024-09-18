@@ -29,6 +29,7 @@
         <th>Pedido Médico</th>
         <th *ngIf="isAdmin" class="is-justify-content-center">Ações</th>
         <th *ngIf="!isAdmin" class="is-justify-content-center">Observações</th>
+        <th *ngIf="!isAdmin" class="is-justify-content-center">Ações</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-registro>
@@ -51,6 +52,9 @@
         </td>
         <td class="mt-4" *ngIf="!isAdmin">
           <p>{{registro.observation}}</p>
+        </td>
+        <td class="mt-4" *ngIf="!isAdmin">
+          <p-button icon="pi pi-pen-to-square" class="button is-primary  is-small" [outlined]="true" pTooltip="Editar" (click)="editar(registro)"/>
         </td>
         <p-confirmPopup />
       </tr>

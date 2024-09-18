@@ -13,7 +13,7 @@ export class MenuService {
 
   listar(token: string, userRoles: string[]): Observable<MenuDto[]> {
     let role = this.getMatchingRole(userRoles);
-    console.log(role)
+    console.log(token)
     const headers = this.getOptionsHeaders(token);
     return this.http.get<MenuDto[]>(`http://localhost:8080/api/menu/byRoleName/${role}`, {headers});
   }
