@@ -113,7 +113,7 @@ public class UserApplicationService extends KeycloakGeneratedToken {
 
             repository.save(user);
 
-            getTokenAndSentEmailCreated(command);
+  //          getTokenAndSentEmailCreated(command);
 
             return ResponseEntity.ok(new ApiResponseDto("Usuário criado com sucesso"));
         }

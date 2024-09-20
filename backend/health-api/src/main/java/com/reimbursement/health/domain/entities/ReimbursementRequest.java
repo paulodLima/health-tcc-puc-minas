@@ -47,11 +47,13 @@ public class ReimbursementRequest extends AutidableEntity{
         this.status = status;
     }
 
-    public void update(String updateUser,BigDecimal amount,Company company,User employee) {
+    public void update(String updateUser,BigDecimal amount,Company company,User employee,String observation,ReimbursementStatus status) {
         this.updateDataAutidablec(updateUser);
         this.amount = amount;
         this.company = company;
         this.user = employee;
+        this.observation = observation;
+        this.status = status;
     }
     public void updateStatus(String updateUser,ReimbursementStatus status, String observation) {
         this.updateDataAutidablec(updateUser);

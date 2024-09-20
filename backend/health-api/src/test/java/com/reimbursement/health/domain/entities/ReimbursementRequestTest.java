@@ -12,7 +12,7 @@ class ReimbursementRequestTest {
     @Test
     void update() {
         ReimbursementRequest request = new ReimbursementRequest();
-        request.update("test",BigDecimal.TWO,new Company(),new User());
+        request.update("test",BigDecimal.TWO,new Company(),new User(),"",ReimbursementStatus.fromValue(1));
 
         assertEquals("test", request.getUpdateUser());
         assertEquals(BigDecimal.TWO, request.getAmount());

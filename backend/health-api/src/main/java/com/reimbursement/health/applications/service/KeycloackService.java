@@ -74,7 +74,6 @@ public class KeycloackService {
 
         user.setRealmRoles(filteredRoleNames);
 
-
         return user;
     }
 
@@ -123,6 +122,19 @@ public class KeycloackService {
         roles.stream()
                 .filter(r -> r.getName().equals(roleUser))
                 .findFirst().ifPresent(role -> keycloak.realm(realmName).users().get(uuid.toString()).roles().realmLevel().add(Collections.singletonList(role)));
+
+        ClientRepresentation client = keycloak.realm(realmName).clients().findByClientId("health-api").stream().findAny().orElse(null);
+
+        if (client != null) {
+            List<RoleRepresentation> clientRoles = keycloak.realm(realmName).clients().get(client.getId()).roles().list();
+
+            clientRoles.stream()
+                    .filter(r -> r.getName().equals(roleUser))
+                    .findFirst().ifPresent(role -> keycloak.realm(realmName).users().get(uuid.toString())
+                            .roles().clientLevel(client.getId())
+                            .add(Collections.singletonList(role)));
+
+        }
 
         if (response.getStatus() == 201) {
             System.out.println("user created successfully!");

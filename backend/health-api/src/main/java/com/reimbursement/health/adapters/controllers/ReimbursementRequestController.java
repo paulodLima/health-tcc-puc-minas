@@ -56,7 +56,6 @@ public class ReimbursementRequestController {
                 .observation(reimbursementRequest.getObservation())
                 .build()).toList();
     }
-
     @PutMapping("/update-status/{id}")
     public ResponseEntity<String> reimbursementStatus(@PathVariable UUID id, @RequestBody UpdateStatusReimbursementRecord record) {
         service.reimbursementStatus(id, record);
@@ -81,7 +80,7 @@ public class ReimbursementRequestController {
         return ResponseEntity.ok("Status atualizado com sucesso!");
     }
 
-    @GetMapping("find-user/{id}")
+    @GetMapping("/find-user/{id}")
     public List<ReimbursementResponseDto> findByIdUser(@PathVariable UUID id) {
         return service.findByIdUser(id).stream().map(reimbursementRequest -> ReimbursementResponseDto.builder()
                 .id(reimbursementRequest.getId().toString())

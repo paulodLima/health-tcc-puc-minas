@@ -106,7 +106,7 @@ public class ReimbursementRequestApplicationService {
         var company = companyApplicationService.findById(command.getCompany());
         var user = userRepository.findById(command.getUser()).orElseThrow();
 
-        reimbursement.update(AuthenticationUtil.getLogin(),command.getAmount(),company,user);
+        reimbursement.update(AuthenticationUtil.getLogin(),command.getAmount(),company,user,null,converedStatus(1));
         updateInvoice(reimbursement,command.getInvoiceUrl());
         updateMedical(reimbursement,command.getMedicalUrl());
         repository.save(reimbursement);
