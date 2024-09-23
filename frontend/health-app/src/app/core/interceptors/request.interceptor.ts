@@ -1,30 +1,28 @@
-import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
-import {switchMap} from "rxjs";
+import { HttpInterceptorFn } from '@angular/common/http';
+import { switchMap, take } from 'rxjs/operators';
+import {CustomOidcSecurityService} from "../../auth/custom-oidc-security-service";
 
 export const requestInterceptor: HttpInterceptorFn = (req, next) => {
-  const oidcSecurityService = inject(OidcSecurityService);
+  const customOidcSecurityService = inject(CustomOidcSecurityService);
 
-  oidcSecurityService.isAuthenticated$.subscribe(({ isAuthenticated }) => {
-
-    const token = localStorage.getItem('access_token');
-
-    if (token) {
-      return oidcSecurityService.getAccessToken().pipe(
-        switchMap(token => {
-          const clonedReq = req.clone({
-            setHeaders: {
-              Authorization: `Bearer ${token}`
+  return customOidcSecurityService.isAuthenticated$.pipe(
+    take(1),
+    switchMap((isAuthenticated) => {
+      if (isAuthenticated) {
+        return customOidcSecurityService.getAccessToken().pipe(
+          switchMap((token) => {
+            if (token) {
+              req = req.clone({
+                headers: req.headers.set('Authorization', `Bearer ${token}`)
+              });
             }
-          });
-          return next(clonedReq);
-        })
-      );
-    } else {
-      return next(req);
-    }
-  });
-
-  return next(req);
+            return next(req);
+          })
+        );
+      } else {
+        return next(req);
+      }
+    })
+  );
 };

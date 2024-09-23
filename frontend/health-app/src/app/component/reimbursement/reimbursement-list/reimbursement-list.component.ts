@@ -132,7 +132,6 @@ export class ReimbursementListComponent implements OnInit {
       dto.status = 'APPROVED';
     })
     this.findAllReimbursement();
-    window.location.reload();
     this.messageService.add({
       severity: 'info',
       summary: 'Sucesso',
@@ -152,12 +151,11 @@ export class ReimbursementListComponent implements OnInit {
   }
 
   visualizar(url: string) {
-    console.log(url)
     this.display = true;
     this.imageUrl = url;
     this.loading = true;
     this.startLoadingTimer().subscribe(() => {
-      this.loading = false; // Remove o spinner quando o timer expira
+      this.loading = false;
     });
   }
 

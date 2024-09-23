@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MessageService } from 'primeng/api'; // Exemplo com PrimeNG
+import { MessageService } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable, take} from "rxjs";
 import {TokenService} from "../../core/token.service";
-import {CompanyDto} from "./company.interface";
+import {CompanyDto, CreateCompanyCommand, UpdateCompanyCommand} from "./company.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +12,21 @@ export class CompanyService {
   constructor(private http: HttpClient,private tokenService: TokenService) { }
 
   listAll() : Observable<CompanyDto[]>{
-    const token = localStorage.getItem('access_token') ?? '';
-    const headers = this.getOptionsHeaders(token);
-    return this.http.get<CompanyDto[]>(`http://localhost:8080/api/company`,{headers}).pipe(take(1));
+    return this.http.get<CompanyDto[]>(`http://localhost:8080/api/company`,).pipe(take(1));
+  }
+  listAllActive() : Observable<CompanyDto[]>{
+    return this.http.get<CompanyDto[]>(`http://localhost:8080/api/company/active`,).pipe(take(1));
   }
 
-  private getOptionsHeaders(token: string) {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Authorization': `Bearer ${token}`
-    });
+  create(command: CreateCompanyCommand): Observable<string> {
+    return this.http.post<string>(`http://localhost:8080/api/company`, command,).pipe(take(1));
+  }
+
+  findById(id: string): Observable<CompanyDto> {
+    return this.http.get<CompanyDto>(`http://localhost:8080/api/company/${id}`,).pipe(take(1));
+  }
+
+  update(command: UpdateCompanyCommand): Observable<CompanyDto> {
+    return this.http.put<CompanyDto>(`http://localhost:8080/api/company/${command.id}`,command,).pipe(take(1));
   }
 }

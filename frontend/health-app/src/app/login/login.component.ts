@@ -7,6 +7,7 @@ import {HttpClient} from "@angular/common/http";
 import {Button} from "primeng/button";
 import {TokenService} from "../core/token.service";
 import {NgOptimizedImage} from "@angular/common";
+import {AuthService} from "../auth/auth-service";
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,7 @@ import {NgOptimizedImage} from "@angular/common";
 export class LoginComponent {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder,private _loginService: LoginService, private router : Router,private http: HttpClient,private oidcSecurityService: OidcSecurityService,private tokenService: TokenService) {
+  constructor(private fb: FormBuilder,private _loginService: LoginService, private router : Router,private http: HttpClient,private oidcSecurityService: OidcSecurityService,private tokenService: TokenService,private authService: AuthService) {
     this.loginForm = this.fb.group({
       login: ['', [Validators.required]],
       password: ['', Validators.required]
@@ -34,7 +35,7 @@ export class LoginComponent {
       const { login, password } = this.loginForm.value;
       this.http.post('http://localhost:7080/realms/health/protocol/openid-connect/token', new URLSearchParams({
         client_id: 'health-api',
-        client_secret: '5oj3ruNQKn4ShqsHu4rq0vTcfp8TsRZC',
+        client_secret:'MuyShRtqmjBHiurKULLdvOi58cInnnRe', //'5oj3ruNQKn4ShqsHu4rq0vTcfp8TsRZC',
         grant_type: 'password',
         username: login,
         password: password,
@@ -45,8 +46,11 @@ export class LoginComponent {
         }
       }).subscribe(
         (response: any) => {
+
+          this.oidcSecurityService.isAuthenticated$.subscribe(({isAuthenticated}) => {
+            const token = localStorage.getItem('access_token');
+          });
           localStorage.setItem('access_token', response.access_token);
-          console.log(response.access_token)
           this.tokenService.setAuthenticated(true);
           this.router.navigate(['/inicio']);
         },
@@ -58,6 +62,20 @@ export class LoginComponent {
     }
   }
   login() {
-    this.oidcSecurityService.authorize();
+    if (this.loginForm.valid) {
+      const { login, password } = this.loginForm.value;
+      this.authService.login(login, password).subscribe(
+        (response) => {
+          this.router.navigate(['/inicio']);
+        },
+        (error) => {
+          console.error('Erro no login', error);
+        }
+      );
+    }
+  }
+  logout() {
+    console.log('passando no logout')
+    this.oidcSecurityService.logoff();
   }
 }

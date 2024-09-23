@@ -93,6 +93,11 @@
             "uma_authorization"
           ],
           "client": {
+            "health-api": [
+              "admin",
+              "user",
+              "manager"
+            ],
             "account": [
               "manage-account",
               "view-profile"
@@ -214,8 +219,8 @@
                 "create-client",
                 "manage-events",
                 "manage-clients",
-                "view-clients",
                 "view-realm",
+                "view-clients",
                 "manage-authorization",
                 "query-groups",
                 "query-users",
@@ -510,6 +515,24 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessExtraOrigins": [],
+  "users": [
+    {
+      "id": "3256049d-d99b-4148-a030-a65639a46878",
+      "username": "service-account-health-api",
+      "emailVerified": false,
+      "createdTimestamp": 1726667361700,
+      "enabled": true,
+      "totp": false,
+      "serviceAccountClientId": "health-api",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-health"
+      ],
+      "notBefore": 0,
+      "groups": []
+    }
+  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -738,7 +761,7 @@
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
+      "serviceAccountsEnabled": true,
       "publicClient": false,
       "frontchannelLogout": true,
       "protocol": "openid-connect",

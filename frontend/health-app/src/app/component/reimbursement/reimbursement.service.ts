@@ -13,48 +13,26 @@ export class ReimbursementService {
   }
 
   listAll(): Observable<ReimbursementResponseDto[]> {
-    const headers = this.getOptionsHeaders();
-    return this.http.get<ReimbursementResponseDto[]>(`http://localhost:8080/api/reimbursement`, {headers}).pipe(take(1));
+    return this.http.get<ReimbursementResponseDto[]>(`http://localhost:8080/api/reimbursement`,).pipe(take(1));
   }
 
   updateStatus(id: string, updateStatus: UpdateStatus): Observable<void> {
-    const headers = this.getOptionsHeaders();
-    return this.http.put<void>(`http://localhost:8080/api/reimbursement/update-status/${id}`, updateStatus, {headers}).pipe(take(1));
+    return this.http.put<void>(`http://localhost:8080/api/reimbursement/update-status/${id}`, updateStatus,).pipe(take(1));
   }
 
   create(command: FormData): Observable<string> {
-    const headers = this.getOptionsHeadersUpload();
-    return this.http.post<string>(`http://localhost:8080/api/reimbursement`, command, {headers}).pipe(take(1));
-  }
-
-  private getOptionsHeaders() {
-    const token = localStorage.getItem('access_token') ?? '';
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Authorization': `Bearer ${token}`
-    });
-  }
-
-  private getOptionsHeadersUpload() {
-    const token = localStorage.getItem('access_token') ?? '';
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
+    return this.http.post<string>(`http://localhost:8080/api/reimbursement`, command,).pipe(take(1));
   }
 
   findById(id: string): Observable<ReimbursementResponseDto> {
-    const headers = this.getOptionsHeaders();
-    return this.http.get<ReimbursementResponseDto>(`http://localhost:8080/api/reimbursement/${id}`, {headers}).pipe(take(1));
+    return this.http.get<ReimbursementResponseDto>(`http://localhost:8080/api/reimbursement/${id}`,).pipe(take(1));
   }
 
   update(id: string,command: FormData): Observable<string> {
-    const headers = this.getOptionsHeadersUpload();
-    return this.http.put<string>(`http://localhost:8080/api/reimbursement/${id}`, command, {headers}).pipe(take(1));
+    return this.http.put<string>(`http://localhost:8080/api/reimbursement/${id}`, command,).pipe(take(1));
   }
 
   findAllById(id: string): Observable<ReimbursementResponseDto[]>  {
-    const headers = this.getOptionsHeaders();
-    return this.http.get<ReimbursementResponseDto[]>(`http://localhost:8080/api/reimbursement/find-user/${id}`, {headers}).pipe(take(1));
+    return this.http.get<ReimbursementResponseDto[]>(`http://localhost:8080/api/reimbursement/find-user/${id}`,).pipe(take(1));
   }
 }

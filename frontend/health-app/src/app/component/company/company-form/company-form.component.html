@@ -1,1 +1,66 @@
-<p>company-form works!</p>
+<p-toast />
+<div class="is-size-3 has-text-centered mt-4 mb-4 is-uppercase has-text-weight-bold">Cadastrar Empresa</div>
+<nav class="panel">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()"  class="box " enctype="multipart/form-data">
+    <div class="columns">
+      <div class="column">
+        <div class="field">
+          <label class="label">CNPJ</label>
+          <div class="control has-icons-left has-icons-right">
+            <input type="text" formControlName="cnpj" class="input" placeholder="Digite o CNPJ"  mask="99.999.999/9999-99">
+            <span class="icon is-small is-left">
+          <i class="pi pi-shop"></i>
+        </span>
+          </div>
+          <p class="help is-danger" *ngIf="form.get('cnpj')?.touched && form.get('cnpj')?.hasError('required')">
+            O campo cnpj é obrigatório.
+          </p>
+          <div class="help is-danger" *ngIf="form.get('cnpj')?.errors?.['invalidCnpj']">
+            CNPJ inválido!
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">Nome</label>
+          <div class="control has-icons-left has-icons-right">
+            <input type="email" formControlName="name" class="input" placeholder="Digite o Nome">
+            <span class="icon is-small is-left">
+          <i class="pi pi-user"></i>
+        </span>
+          </div>
+          <p class="help is-danger" *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')">
+            O campo nome é obrigatório.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="field">
+          <label class="label">Status</label>
+          <div class="control has-icons-left has-icons-right">
+            <div class="select is-fullwidth">
+              <select formControlName="status">
+                <option *ngFor="let status of status" [value]="status.value">
+                  {{ status.display }}
+                </option>
+              </select>
+            </div>
+            <span class="icon is-small is-left">
+          <i class="pi pi-check-circle"></i>
+        </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <button *ngIf="!isupdate" type="submit" class="button is-primary" [disabled]="form.invalid">Cadastrar</button>
+        <button *ngIf="isupdate" type="submit" class="button is-primary" [disabled]="form.invalid">Atualizar</button>
+      </div>
+      <div class="control">
+        <button type="button" class="button is-light" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </form>
+</nav>

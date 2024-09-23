@@ -1,1 +1,52 @@
-<p>company-list works!</p>
+<p-toast/>
+<div class="is-size-3 has-text-centered mt-4 mb-4 is-uppercase has-text-weight-bold">Empresas</div>
+<div>
+  <p-table [value]="registros" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }" class="mx-4 p-4	"
+           #dt
+           [rowsPerPageOptions]="[5, 10, 20]" [globalFilterFields]="['cnpj', 'name','status']"
+           [showCurrentPageReport]="true"
+           [rowHover]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterInputChange($event)"
+          placeholder="Pesquisar..."
+        />
+      </span>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">Nome</th>
+        <th class="text-center">CNPJ</th>
+        <th class="text-center">Status</th>
+        <th class="text-center">Data de inclusão</th>
+        <th class="text-center">Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-registro>
+      <tr>
+        <td class="p-2 text-center">{{ registro.name }}</td>
+        <td class="p-2 text-center">{{ registro.cnpj }}</td>
+        <td class="p-2 text-center">{{ registro.status == true ? 'Ativo' : 'Inativo' }}</td>
+        <td class="p-2 text-center">{{ registro.inclusionDate | date:'dd/MM/yyyy' }}</td>
+        <td class="p-2 text-center">
+          <p-button icon="pi pi-file-edit" class="button is-warning ml-3  is-small" [outlined]="true"
+                    pTooltip="Editar" (onClick)="updateCompany(registro)"/>
+        </td>
+        <p-confirmPopup/>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" class="text-center">Nenhuma empresa encontrado</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

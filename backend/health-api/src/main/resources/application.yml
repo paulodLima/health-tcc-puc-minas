@@ -1,3 +1,5 @@
+server:
+  port: 8080
 keycloak:
   base-url: http://localhost:7080
   client-id: admin-cli
@@ -7,7 +9,7 @@ keycloak:
 keycloak-realm:
   base-url: http://localhost:7080
   client-id: health-api
-  client-secret: 5oj3ruNQKn4ShqsHu4rq0vTcfp8TsRZC
+  client-secret: MuyShRtqmjBHiurKULLdvOi58cInnnRe
 
 spring:
   servlet:
@@ -75,8 +77,8 @@ aws:
 
 logging:
   level:
-    org.springframework.security: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.security: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
   pattern:
     console: "%d{dd-MM-yyyy HH:mm:ss} %magenta([%thread]) %highlight(%-5level) %logger.%M - %msg%n"
 email:
@@ -120,6 +122,6 @@ email-status-rejected:
     Sua Empresa "
 
 
-debug: true
+debug: false
 
 

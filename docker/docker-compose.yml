@@ -15,8 +15,10 @@ services:
     restart: always
     networks:
       - health-network
+      
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.2
+    container_name: keycloak
     environment:
       KC_HOSTNAME: localhost
       KC_HOSTNAME_PORT: 7080
@@ -45,10 +47,22 @@ services:
     networks:
       - health-network
     restart: always
-      
+]    
+  health-app:
+    build:
+      context: ../frontend/health-app
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    depends_on:
+      - health-api    
+    networks:
+      - health-network
+    restart: always  
+    
 networks:
   health-network:
     driver: bridge
-
+    
 volumes:
   data:

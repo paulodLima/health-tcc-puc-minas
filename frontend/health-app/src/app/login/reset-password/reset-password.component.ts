@@ -54,7 +54,6 @@ export class ResetPasswordComponent implements OnInit{
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.token = params['token'];
-      console.log(params)
       if (this.token) {
         this.decodeToken(this.token);
       }
@@ -84,7 +83,6 @@ export class ResetPasswordComponent implements OnInit{
     try {
       const decoded: any = jwtDecode(token);
       this.id = decoded.sub;
-      console.log('id',this.id)
     } catch (error) {
       this.router.navigate(['/login']);
       console.error('Erro ao decodificar o token:', error);

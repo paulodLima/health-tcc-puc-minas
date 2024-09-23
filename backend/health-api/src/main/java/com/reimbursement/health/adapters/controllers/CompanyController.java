@@ -35,6 +35,25 @@ public class CompanyController {
         ).toList();
     }
 
+    @GetMapping("/active")
+    public List<CompanyDto> findAllActive() {
+        return service.findAll().stream()
+                .filter(company -> Boolean.TRUE.equals(company.getStatus()))
+                .map(company -> CompanyDto.builder()
+                        .id(company.getId().toString())
+                        .name(company.getName())
+                        .status(company.getStatus())
+                        .cnpj(company.getCnpj().getNumeroFormatado())
+                        .inclusionDate(company.getInclusionDate())
+                        .updateDate(company.getUpdateDate())
+                        .inclusionUser(company.getInclusionUser())
+                        .updateUser(company.getUpdateUser())
+                        .build()
+                )
+                .toList();
+
+    }
+
     @GetMapping("{id}")
     public Company findById(@PathVariable UUID id) {
         return service.findById(id);

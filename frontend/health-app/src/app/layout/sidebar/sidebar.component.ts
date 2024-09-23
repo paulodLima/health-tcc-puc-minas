@@ -48,7 +48,6 @@ export class SidebarComponent implements OnInit {
     const userRoles = this.tokenService.getRolesUser(token);
     this._menuService.listar(token, userRoles).subscribe(menus => {
       this.menus = menus.map(menu => {
-        console.log(userRoles)
         if (userRoles.includes('user')) {
           menu.subMenus = menu.subMenus.filter(sub => sub.titulo !== 'Lista');
         }

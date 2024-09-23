@@ -10,11 +10,12 @@ import {HomeComponent} from "./component/home/home.component";
 import {AvatarModule} from "primeng/avatar";
 import {OidcSecurityService} from "angular-auth-oidc-client";
 import {MessageService} from "primeng/api";
+import {NgxMaskDirective} from "ngx-mask";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ButtonDirective, NgIf, AvatarModule],
+  imports: [RouterOutlet, ButtonDirective, NgIf, AvatarModule,NgxMaskDirective],
   providers: [MessageService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -45,7 +46,6 @@ export class AppComponent implements OnInit {
   private extractRolesFromToken(token: string): void {
     const tokenPayload = JSON.parse(atob(token.split('.')[1]));
     this.roles = tokenPayload.resource_access?.['health-api']?.roles || tokenPayload.realm_access.roles;
-    console.log(this.roles)
   }
 
   isLoginOrResetPage(): boolean {

@@ -16,13 +16,11 @@ import com.reimbursement.health.domain.records.GeneratedTokenRecord;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -113,7 +111,7 @@ public class UserApplicationService extends KeycloakGeneratedToken {
 
             repository.save(user);
 
-  //          getTokenAndSentEmailCreated(command);
+            getTokenAndSentEmailCreated(command);
 
             return ResponseEntity.ok(new ApiResponseDto("Usuário criado com sucesso"));
         }

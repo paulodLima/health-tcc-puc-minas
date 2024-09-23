@@ -113,7 +113,6 @@ export class UserListComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.log('error',error)
         const errorMessage = error.error?.detail || 'Ocorreu um erro resetar a senha.';
         this.messageService.add({severity: 'warn', summary: 'Atenção', detail: errorMessage});
       }

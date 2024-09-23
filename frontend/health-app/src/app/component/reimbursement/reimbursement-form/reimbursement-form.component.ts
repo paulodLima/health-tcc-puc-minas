@@ -12,6 +12,8 @@ import {ReimbursementService} from "../reimbursement.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TokenService} from "../../../core/token.service";
 import {loadEsmModuleFromMemory} from "@angular-devkit/build-angular/src/utils/server-rendering/load-esm-from-memory";
+import {MyMessageService} from "../../../services/MyMessageService";
+import {ToastModule} from "primeng/toast";
 
 @Component({
   selector: 'app-reimbursement-form',
@@ -23,8 +25,9 @@ import {loadEsmModuleFromMemory} from "@angular-devkit/build-angular/src/utils/s
     TooltipModule,
     InputTextModule,
     NgForOf,
-    NgIf
-  ],
+    NgIf,
+    ToastModule
+  ],providers: [MyMessageService],
   templateUrl: './reimbursement-form.component.html',
   styleUrl: './reimbursement-form.component.scss'
 })
@@ -32,7 +35,7 @@ export class ReimbursementFormComponent implements OnInit {
   companyDto: CompanyDto[] = [];
   files: { [key: string]: File | null } = {};
   id = '';
-  form : FormGroup = new FormGroup({
+  form: FormGroup = new FormGroup({
     id: new FormControl<string | null>(null),
     user: new FormControl<string | null>(null),
     company: new FormControl<string | null>(null, [Validators.required]),
@@ -41,17 +44,16 @@ export class ReimbursementFormComponent implements OnInit {
     invoiceUrl: new FormControl<string | null>(null, [Validators.required]),
   });
 
-  constructor(private fb: FormBuilder, private companyService: CompanyService, private reimbursementService: ReimbursementService, private _router: Router,private tokenService: TokenService,private _activatedRoute: ActivatedRoute,) {
+  constructor(private fb: FormBuilder, private companyService: CompanyService, private messageService: MyMessageService, private reimbursementService: ReimbursementService, private _router: Router, private tokenService: TokenService, private _activatedRoute: ActivatedRoute,) {
   }
 
   ngOnInit(): void {
-    this.companyService.listAll().subscribe(result => {
+    this.companyService.listAllActive().subscribe(result => {
       this.companyDto = result;
     });
     this._activatedRoute.params.subscribe((params) => {
       if (params['id']) {
         this.reimbursementService.findById(params['id']).subscribe((reimbursement) => {
-          console.log(reimbursement)
           this.id = reimbursement.id;
           this.form.patchValue({
             id: reimbursement.id,
@@ -76,7 +78,6 @@ export class ReimbursementFormComponent implements OnInit {
       formData.append('medicalUrl', this.files['medicalUrl']!, this.files['medicalUrl']!.name);
       formData.append('invoiceUrl', this.files['invoiceUrl']!, this.files['invoiceUrl']!.name);
 
-      console.log(this.id)
       if (this.id) {
         this.update(formData);
       } else {
@@ -96,6 +97,7 @@ export class ReimbursementFormComponent implements OnInit {
     this.reimbursementService.create(formData).subscribe({
       next: () => {
         this._router.navigate(['/reembolso']);
+        this.messageService.addSucess(['Reembolso criado com sucesso!']);
       },
       error: (error) => {
       }
@@ -108,13 +110,20 @@ export class ReimbursementFormComponent implements OnInit {
 
   private update(formData: FormData) {
     var command = this.form.value as ReimbursementResponseDto;
-    this.reimbursementService.update(command.id,formData).subscribe({
+    this.reimbursementService.update(command.id, formData).subscribe({
       next: () => {
+        this.messageService.addSucess(['Empresa criada com sucesso!']);
+        setTimeout(() => {
         this._router.navigate(['/reembolso']);
+        }, 2000);
       },
       error: (error) => {
       }
+
     })
-    this._router.navigate(['/reembolso']);
+    this.messageService.addSucess(['Reembolso atualizado com sucesso!']);
+    setTimeout(() => {
+      this._router.navigate(['/reembolso']);
+    }, 2000);
   }
 }

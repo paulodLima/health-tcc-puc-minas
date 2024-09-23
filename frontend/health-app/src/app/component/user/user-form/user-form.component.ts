@@ -61,7 +61,6 @@ export class UserFormComponent implements OnInit{
             perfil: user.perfil,
             status: user.status
           });
-          console.log(user)
         });
       }else{
         this.isupdate = false;
@@ -72,6 +71,7 @@ export class UserFormComponent implements OnInit{
   onSubmit() {
     if(this.form.valid) {
       const user = this.form.value as CreateUserCommand;
+      console.log(user)
       this.userService.create(user).subscribe({
         next: (response) => {
           this.messageService.addSucess(['Usuário criado com sucesso!']);
@@ -83,7 +83,6 @@ export class UserFormComponent implements OnInit{
         }
       });
     }
-
   }
 
   cancelar() {
@@ -92,9 +91,7 @@ export class UserFormComponent implements OnInit{
 
   update() {
     if(this.form.valid) {
-      console.log(this.form.value)
       const user = this.form.value as UpdateUserCommand;
-      console.log(user)
       this.userService.update(user).subscribe({
         next: (response) => {
           this.messageService.addSucess(['Usuário atualizado com sucesso!']);

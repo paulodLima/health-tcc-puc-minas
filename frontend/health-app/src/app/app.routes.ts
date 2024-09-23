@@ -23,11 +23,20 @@ export const routes: Routes = [
           //loadComponent: () => import('./component/reimbursement/reimbursement-list/reimbursement-list.component').then(m => m.ReimbursementListComponent),
           data: { roles: ['admin','manager','user'] }
         },
+        {
+          path: 'empresa',
+          loadChildren: () => import('./component/company/company.module').then((m) => m.CompanyListModule),
+          data: { roles: ['admin','manager'] }
+        },
         {path: '', redirectTo: 'login', pathMatch: 'full'}
       ]
     },
     {
       path: 'reset/:token',
+      loadComponent: () => import('./login/reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
+    },
+    {
+      path: 'reset',
       loadComponent: () => import('./login/reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
     },
     {

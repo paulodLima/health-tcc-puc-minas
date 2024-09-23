@@ -5,7 +5,7 @@
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
-  "accessTokenLifespan": 300,
+  "accessTokenLifespan": 1500,
   "accessTokenLifespanForImplicitFlow": 900,
   "ssoSessionIdleTimeout": 1800,
   "ssoSessionMaxLifespan": 36000,
@@ -18,7 +18,7 @@
   "clientSessionMaxLifespan": 0,
   "clientOfflineSessionIdleTimeout": 0,
   "clientOfflineSessionMaxLifespan": 0,
-  "accessCodeLifespan": 60,
+  "accessCodeLifespan": 1500,
   "accessCodeLifespanUserAction": 300,
   "accessCodeLifespanLogin": 1800,
   "actionTokenGeneratedByAdminLifespan": 43200,
@@ -93,11 +93,6 @@
             "uma_authorization"
           ],
           "client": {
-            "health-api": [
-              "admin",
-              "user",
-              "manager"
-            ],
             "account": [
               "manage-account",
               "view-profile"
@@ -219,8 +214,8 @@
                 "create-client",
                 "manage-events",
                 "manage-clients",
-                "view-realm",
                 "view-clients",
+                "view-realm",
                 "manage-authorization",
                 "query-groups",
                 "query-users",
@@ -362,6 +357,17 @@
       ],
       "security-admin-console": [],
       "admin-cli": [],
+      "health-app": [
+        {
+          "id": "940893bd-4be5-420a-b62a-43cce2253ffb",
+          "name": "admin",
+          "description": "",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "6b70db9c-2398-407d-9001-9ccb4cb7cc80",
+          "attributes": {}
+        }
+      ],
       "account-console": [],
       "broker": [
         {
@@ -515,24 +521,6 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessExtraOrigins": [],
-  "users": [
-    {
-      "id": "3256049d-d99b-4148-a030-a65639a46878",
-      "username": "service-account-health-api",
-      "emailVerified": false,
-      "createdTimestamp": 1726667361700,
-      "enabled": true,
-      "totp": false,
-      "serviceAccountClientId": "health-api",
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "realmRoles": [
-        "default-roles-health"
-      ],
-      "notBefore": 0,
-      "groups": []
-    }
-  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -750,7 +738,7 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://localhost:8080/login/oauth2/code/keycloak"
+        "http://localhost:8080/*"
       ],
       "webOrigins": [
         "*"
@@ -761,17 +749,18 @@
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": true,
+      "serviceAccountsEnabled": false,
       "publicClient": false,
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
         "oidc.ciba.grant.enabled": "false",
-        "client.secret.creation.time": "1726059938",
+        "client.secret.creation.time": "1726104040",
         "backchannel.logout.session.required": "true",
         "post.logout.redirect.uris": "http://localhost:8080/",
         "display.on.consent.screen": "false",
         "oauth2.device.authorization.grant.enabled": "false",
+        "use.jwks.url": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
       },
       "authenticationFlowBindingOverrides": {},
@@ -797,6 +786,60 @@
           }
         }
       ],
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "6b70db9c-2398-407d-9001-9ccb4cb7cc80",
+      "clientId": "health-app",
+      "name": "Angular",
+      "description": "",
+      "rootUrl": "http://localhost:4200/",
+      "adminUrl": "http://localhost:4200",
+      "baseUrl": "http://localhost:4200",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [
+        "http://localhost:4200/*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "post.logout.redirect.uris": "http://localhost:4200/*",
+        "display.on.consent.screen": "false",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
       "defaultClientScopes": [
         "web-origins",
         "acr",
@@ -1576,13 +1619,13 @@
         "config": {
           "allowed-protocol-mapper-types": [
             "oidc-usermodel-property-mapper",
-            "saml-role-list-mapper",
             "saml-user-attribute-mapper",
-            "oidc-usermodel-attribute-mapper",
             "oidc-address-mapper",
             "oidc-sha256-pairwise-sub-mapper",
+            "saml-role-list-mapper",
             "saml-user-property-mapper",
-            "oidc-full-name-mapper"
+            "oidc-full-name-mapper",
+            "oidc-usermodel-attribute-mapper"
           ]
         }
       },
@@ -1594,14 +1637,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-user-attribute-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-full-name-mapper",
-            "oidc-address-mapper",
-            "oidc-usermodel-property-mapper",
             "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-full-name-mapper",
+            "saml-user-property-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-address-mapper",
             "saml-role-list-mapper",
-            "saml-user-property-mapper"
+            "saml-user-attribute-mapper"
           ]
         }
       },
@@ -2348,14 +2391,19 @@
     "clientOfflineSessionMaxLifespan": "0",
     "oauth2DevicePollingInterval": "5",
     "clientSessionIdleTimeout": "0",
+    "actionTokenGeneratedByUserLifespan.verify-email": "",
+    "actionTokenGeneratedByUserLifespan.idp-verify-account-via-email": "",
     "clientOfflineSessionIdleTimeout": "0",
+    "actionTokenGeneratedByUserLifespan.execute-actions": "",
     "cibaInterval": "5",
     "realmReusableOtpCode": "false",
     "cibaExpiresIn": "120",
     "oauth2DeviceCodeLifespan": "600",
     "parRequestUriLifespan": "60",
     "clientSessionMaxLifespan": "0",
-    "organizationsEnabled": "false"
+    "organizationsEnabled": "false",
+    "shortVerificationUri": "",
+    "actionTokenGeneratedByUserLifespan.reset-credentials": ""
   },
   "keycloakVersion": "25.0.2",
   "userManagedAccessAllowed": false,

@@ -51,6 +51,7 @@ export class TokenService {
   logout() {
     localStorage.removeItem('access_token');
     this._authenticated.next(false);
+    console.log(localStorage)
     this.router.navigate(['/login']).then(() => {
       window.location.reload();
     });
