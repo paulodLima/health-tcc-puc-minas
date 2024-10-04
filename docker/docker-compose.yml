@@ -47,15 +47,14 @@ services:
     networks:
       - health-network
     restart: always
-]    
+
   health-app:
     build:
       context: ../frontend/health-app
       dockerfile: Dockerfile
     ports:
       - "4200:4200"
-    depends_on:
-      - health-api    
+   
     networks:
       - health-network
     restart: always  
